@@ -1,4 +1,6 @@
 # sj2324-5ehif-cooking-user
+<img src="UML/model_101023.png">
+
 
 "In a realm where recipes blend,
 The CookBook app, our dearest friend.
