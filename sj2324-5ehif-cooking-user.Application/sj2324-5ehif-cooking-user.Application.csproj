@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>sj2324_5ehif_cooking_user.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.*" />
+    <PackageReference Include="Bogus" Version="34.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.*" />
+  </ItemGroup>
+
+</Project>
