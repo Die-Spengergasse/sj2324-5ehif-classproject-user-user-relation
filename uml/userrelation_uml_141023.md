@@ -1,3 +1,4 @@
+```plantuml
 @startuml
 hide empty methods
 left to right direction
@@ -71,3 +72,4 @@ Key <|-- FeedbackKey
 Key <|-- FollowKey
 Key <|-- UserKey
 Key <|-- RecipeShareKey
+```
