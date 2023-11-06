@@ -16,9 +16,12 @@ namespace sj2324_5ehif_cooking_user.Application.Infrastrucutre
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<User> Users { get; set; }
 
-        // TODO: Replace with data from env file
+        private static string dbUsername = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? throw new Exception();
+        private static string dbPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? throw new Exception();
+
+        private string connectionString = $"Host=postgres;Database=db_user;Username={dbUsername};Password={dbPassword}";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=postgres;Database=user_db;Username=user;Password=pOLDUProPJ");
+            => optionsBuilder.UseNpgsql(connectionString);
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
