@@ -24,6 +24,12 @@ public class KeyTest
         var prefix = "Test";
         var length = 12;
         TestKey testKey = new TestKey(prefix: prefix, length: length);
-        Assert.True(testKey.CheckKey(testKey));
+        Assert.True(TestKey.CheckKey(testKey._value));
+    }
+
+    [Fact]
+    public void TestWrongKeyCheck()
+    {
+        Assert.False(TestKey.CheckKey("aaaaaaaaaaaaaaaaaaaaaa"));
     }
 }
