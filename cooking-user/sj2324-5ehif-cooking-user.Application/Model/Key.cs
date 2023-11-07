@@ -1,31 +1,37 @@
-﻿using System.Diagnostics;
-using System.Text;
-using ICSharpCode.SharpZipLib;
-using ICSharpCode.SharpZipLib.Checksum;
+﻿using System.Text;
 using SimpleISO7064;
 
 namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public abstract class Key
 {
-    public String _prefix { get; }
-    private int _length { get; }
-    public readonly string _value;
+    public String Prefix { get; }
+    public int Length { get; }
+    public  string Value { get; }
 
     protected Key(string prefix, int length)
     {
-        _prefix = prefix;
-        _length = length;
-        _value = GenerateKey();
+        Prefix = prefix;
+        Length = length;
+        Value = GenerateKey();
     }
+
+    protected Key(string value, string prefix, int length)
+    {
+        Prefix = prefix;
+        Length = length;
+        Value = value;
+        
+    }
+    
 
     private string GetRandomPart()
     {
         Random rnd = new Random();
-        StringBuilder sb = new StringBuilder(_length);
+        StringBuilder sb = new StringBuilder(Length);
         string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         int counter = 0;
-        for (int i = 0; i < _length; i++)
+        for (int i = 0; i < Length; i++)
         {
             sb.Append(chars[rnd.Next(chars.Length)]);
         }
@@ -36,7 +42,7 @@ public abstract class Key
     public string GenerateKey()
     {
         string randomPart = GetRandomPart();
-        string key = _prefix + randomPart;
+        string key = Prefix + randomPart;
         string a = new Iso7064Factory().GetMod37Radix2().ComputeCheckDigit(key);
         return key + a;
     }
