@@ -11,7 +11,35 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - cookbook-network
-        
+  
+  user:
+    build:
+      context: ../cooking-user/
+      dockerfile: ../Docker/user.Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - cookbook-network
+    
+  user-relations:
+    build:
+      context: ../cooking-user-relations/
+      dockerfile: ../Docker/user-relation.Dockerfile
+    ports:
+      - "5100:5100"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - cookbook-network
+
 volumes:
   postgres_data:
 
