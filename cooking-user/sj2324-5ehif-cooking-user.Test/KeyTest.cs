@@ -13,9 +13,9 @@ public class KeyTest
         var prefix = "Test";
         var length = 12;
         TestKey testKey = new TestKey(prefix: prefix, length: length);
-        Assert.True(testKey._value.Substring(0, prefix.Length) == prefix);
+        Assert.True(testKey.Value.Substring(0, prefix.Length) == prefix);
 
-        Assert.True(testKey._value.Substring(prefix.Length - 1, length).Length == length);
+        Assert.True(testKey.Value.Substring(prefix.Length - 1, length).Length == length);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class KeyTest
         var prefix = "Test";
         var length = 12;
         TestKey testKey = new TestKey(prefix: prefix, length: length);
-        Assert.True(TestKey.CheckKey(value:testKey._value,prefix: prefix));
+        Assert.True(TestKey.CheckKey(value:testKey.Value,prefix: prefix));
     }
     
     [Fact]
