@@ -10,8 +10,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
 {
     public class CookbookDto
     {
-        public long? Id { get; set; }
-       // public CookbookKeyDto? CookbookKey { get; set; }
+        public string? CookbookKey { get; set; }
         public UserDto? Owner { get; set; }
         public string? Name { get; set; }
         public bool? Private { get; set; }
