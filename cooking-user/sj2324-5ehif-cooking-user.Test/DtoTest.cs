@@ -15,7 +15,7 @@ public class DtoTest
     }
 
     [Fact]
-    public void AutoMapper_UserDtor_MapsCorrectly()
+    public void AutoMapper_UserDto_MapsCorrectly()
     {
         var userDto = new UserDto
         {
@@ -84,7 +84,7 @@ public class DtoTest
 
 
     [Fact]
-    public void AutoMapper_ShouldThrowException_WhenPreferenceDtoNameIsInvalid()
+    public void AutoMapper_Incorrectly_ExceptionPreferencName()
     {
         var invalidPreferenceDto = new PreferenceDto
         {
@@ -100,7 +100,7 @@ public class DtoTest
     }
 
     [Fact]
-    public void AutoMapper_ShouldThrowException_WhenPreferenceDtoKeyIsInvalid()
+    public void AutoMapper_Incorrectly_ExceptionPreferenceKey()
     {
         var invalidPreferenceDto = new PreferenceDto
         {
