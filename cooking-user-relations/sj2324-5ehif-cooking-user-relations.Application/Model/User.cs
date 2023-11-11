@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sj2324_5ehif_cooking_user.Application.Model
-
+namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class Recipe
+    public class User
     {
-        [Required] public RecipeKey Key { get; }
-        [Required] [StringLength(50)] public string Name { get; }
+        [Required] public UserKey Key { get; }
+        [Required][StringLength(100)] public string Name { get; }
 
-        public Recipe(RecipeKey key, string name)
+        public User(UserKey key, string name)
         {
             Key = key;
             Name = name;

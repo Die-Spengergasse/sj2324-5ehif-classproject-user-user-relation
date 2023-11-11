@@ -9,6 +9,7 @@ namespace sj2324_5ehif_cooking_user.Application.Model
 {
     public class Preference
     {
+        [Key] public long Id { get; private set; }
         [Required] public PreferenceKey Key { get; }
         public string Name { get; }
 

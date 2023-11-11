@@ -7,4 +7,4 @@ public class UserKey : Key
     public UserKey() : base(prefix: "USR", length: 14)
     {
     }
-}
+} 

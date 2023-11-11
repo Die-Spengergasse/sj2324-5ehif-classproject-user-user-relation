@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sj2324_5ehif_cooking_user.Application.Model
+namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class RecipeKey : Key
+    public class UserKey : Key
     {
-        public RecipeKey() : base(prefix: "REC", length: 15)
+        public UserKey() : base(prefix: "USR", length: 14)
         {
         }
     }
