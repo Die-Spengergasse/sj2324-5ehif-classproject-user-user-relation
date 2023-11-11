@@ -38,6 +38,19 @@ public class DtoTest
         Assert.Equal(userDto.Email, user.Email);
         Assert.Equal(userDto.Preferences.Count, user.Preferences.Count);
     }
+    [Fact]
+    public void AutoMapper_UserToUserDto_MapsKeyCorrectly()
+    {
+        var user = new User("testUser", "Doe", "John", "john.doe@example.com");
+        user.AddPreference(new Preference(new PreferenceKey("PRE1234567890X"), "Vegan"));
+
+        var userDto = _mapper.Map<UserDto>(user);
+
+        Assert.NotNull(userDto);
+        Assert.Equal(user.Key.Value, userDto.UserKey);
+        Assert.Single(userDto.Preferences);
+        Assert.Equal(user.Preferences.First().Key.Value, userDto.Preferences.First().PreferenceKey);
+    }
 
     [Fact]
     public void AutoMapper_RecipeDto_MapsCorrectly()
@@ -84,34 +97,52 @@ public class DtoTest
 
 
     [Fact]
-    public void AutoMapper_Incorrectly_ExceptionPreferencName()
+    public void AutoMapper_CookbookToCookbookDto_MapsCorrectly()
     {
-        var invalidPreferenceDto = new PreferenceDto
-        {
-            PreferenceKey = "PRE1234567X", 
-            Name = "" 
-        };
+        var user = new User("ownerUsername", "OwnerLastname", "OwnerFirstname", "owner@example.com");
+        var cookbook = new Cookbook(user, "My Cookbook", false);
+        cookbook.AddRecipe(new Recipe(new RecipeKey("REC1234567890AB"), "My Recipe"));
 
-        var exception = Assert.Throws<ApplicationException>(() =>
-            _mapper.Map<Preference>(invalidPreferenceDto)
-        );
+        var cookbookDto = _mapper.Map<CookbookDto>(cookbook);
 
-        Assert.Equal("Invalid preference key.", exception.Message);
+        Assert.NotNull(cookbookDto);
+        Assert.Equal(cookbook.Name, cookbookDto.Name);
+        Assert.Equal(cookbook.Private, cookbookDto.Private);
+        Assert.Equal(cookbook.Recipes.Count, cookbookDto.Recipes.Count);
+        Assert.Equal(cookbook.Key.Value, cookbookDto.CookbookKey);
     }
 
     [Fact]
-    public void AutoMapper_Incorrectly_ExceptionPreferenceKey()
+    public void AutoMapper_RecipeToRecipeDto_MapsCorrectly()
     {
-        var invalidPreferenceDto = new PreferenceDto
+        var recipe = new Recipe(new RecipeKey("REC1234567890AB"), "My Recipe");
+
+        var recipeDto = _mapper.Map<RecipeDto>(recipe);
+
+        Assert.NotNull(recipeDto);
+        Assert.Equal(recipe.Name, recipeDto.Name);
+        Assert.Equal(recipe.Key.Value, recipeDto.RecipeKey);
+    }
+
+    [Fact]
+    public void AutoMapper_ApplicationException_ThrownForInvalidRecipeDto()
+    {
+        var recipeDto = new RecipeDto
         {
-            PreferenceKey = "",
-            Name = "Vegan"
+            RecipeKey = "REC1234567890AB",
         };
 
-        var exception = Assert.Throws<ApplicationException>(() =>
-            _mapper.Map<Preference>(invalidPreferenceDto)
-        );
+        Assert.Throws<ApplicationException>(() => _mapper.Map<Recipe>(recipeDto));
+    }
 
-        Assert.Equal("Invalid preference name.", exception.Message);
+    [Fact]
+    public void AutoMapper_ApplicationException_ThrownForInvalidCookbookDto()
+    {
+        var cookbookDto = new CookbookDto
+        {
+            CookbookKey = "COB123456789AB", 
+        };
+
+        Assert.Throws<ApplicationException>(() => _mapper.Map<Cookbook>(cookbookDto));
     }
 }
