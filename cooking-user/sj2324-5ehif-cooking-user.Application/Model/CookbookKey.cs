@@ -2,7 +2,10 @@
 
 public class CookbookKey : Key
 {
-    public CookbookKey() : base(prefix:"COB", 12)
+    public CookbookKey() : base(prefix:"COB", length:12)
+    {
+    }
+    public CookbookKey(string value) : base(value:value,prefix:"COB", length:12)
     {
     }
 }

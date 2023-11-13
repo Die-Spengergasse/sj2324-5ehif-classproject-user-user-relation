@@ -29,7 +29,7 @@ namespace sj2324_5ehif_cooking_user.Application.Infrastrucutre
             {
                 entity.OwnsOne(e => e.Key, navigation =>
                 {
-                    navigation.HasIndex(nameof(UserKey._value)).IsUnique();
+                    navigation.HasIndex(nameof(UserKey.Value)).IsUnique();
                 });
 
                 entity.HasIndex(u => u.Email).IsUnique();
@@ -39,7 +39,7 @@ namespace sj2324_5ehif_cooking_user.Application.Infrastrucutre
             {
                 entity.OwnsOne(e => e.Key, navigation =>
                 {
-                    navigation.HasIndex(nameof(CookbookKey._value)).IsUnique();
+                    navigation.HasIndex(nameof(CookbookKey.Value)).IsUnique();
                 });
             });
 
@@ -47,7 +47,7 @@ namespace sj2324_5ehif_cooking_user.Application.Infrastrucutre
             {
                 entity.OwnsOne(e => e.Key, navigation =>
                 {
-                    navigation.HasIndex(nameof(PreferenceKey._value)).IsUnique();
+                    navigation.HasIndex(nameof(PreferenceKey.Value)).IsUnique();
                 });
             });
 
@@ -55,7 +55,7 @@ namespace sj2324_5ehif_cooking_user.Application.Infrastrucutre
             {
                 entity.OwnsOne(e => e.Key, navigation =>
                 {
-                    navigation.HasIndex(nameof(RecipeKey._value)).IsUnique();
+                    navigation.HasIndex(nameof(RecipeKey.Value)).IsUnique();
                 });
             });
 
