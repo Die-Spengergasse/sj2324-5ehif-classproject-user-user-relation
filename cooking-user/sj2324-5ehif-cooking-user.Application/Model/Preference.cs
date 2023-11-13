@@ -18,11 +18,10 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             Name = name;
         }
 
-
 #pragma warning disable CS8618
         protected Preference()
         {
         }
 #pragma warning restore CS8618
-    }
+   }
 }

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # sj2324-5ehif-cooking-user
 <img src="UML/model_101023.png">
 
@@ -24,6 +23,4 @@ In our kitchens, you're the shining star,
 With you, we'll cook, no matter how far.""
 
 -Ghandi
-=======
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/Jnp0ezuD)
->>>>>>> 300fe63 (add deadline)
+

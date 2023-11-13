@@ -12,8 +12,6 @@
     <PackageReference Include="Bogus" Version="34.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.*" />
-<<<<<<< HEAD
-<<<<<<< HEAD
     <PackageReference Include="NetEncryptionLibrary" Version="5.16.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
@@ -22,23 +20,10 @@
     <PackageReference Include="xunit.extensibility.core" Version="2.4.2" />
   </ItemGroup>
 
-
-=======
-  </ItemGroup>
-
->>>>>>> 9d4cb3a (Folder-Restructure  & User-UML added)
-=======
-    <PackageReference Include="NetEncryptionLibrary" Version="5.16.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="SimpleISO7064" Version="1.0.0" />
-  </ItemGroup>
-
-
   <ItemGroup>
     <Folder Include="Model\" />
   </ItemGroup>
 
 
->>>>>>> b5e65bc (Merged feature/key-generation with all changes)
+
 </Project>
