@@ -1,12 +1,4 @@
-﻿using sj2324_5ehif_cooking_user.Application.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace sj2324_5ehif_cooking_user.Application.DTO
+﻿namespace sj2324_5ehif_cooking_user.Application.DTO
 {
     public class CookbookDto
     {
