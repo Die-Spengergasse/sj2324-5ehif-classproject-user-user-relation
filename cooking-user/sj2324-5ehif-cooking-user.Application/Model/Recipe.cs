@@ -13,7 +13,7 @@ public class Recipe
         set => Id = value.Value;
     }
         
-    [Required] 
+    [Required(AllowEmptyStrings = false)]
     [StringLength(50)] 
     public string Name { get; set; }
     public Recipe(string name)

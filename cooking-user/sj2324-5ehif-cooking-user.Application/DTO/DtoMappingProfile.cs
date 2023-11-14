@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using sj2324_5ehif_cooking_user.Application.DTO;
 using sj2324_5ehif_cooking_user.Application.Model;
+
 namespace sj2324_5ehif_cooking_user.Application.DTO
 {
     public class DtoMappingProfile : Profile
@@ -15,24 +15,21 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     if (string.IsNullOrEmpty(src.Firstname)) { throw new ApplicationException("Invalid firstname"); }
                     if (string.IsNullOrEmpty(src.Email)) { throw new ApplicationException("Invalid email"); }
                 });
-
-
+            
             CreateMap<PreferenceDto, Preference>()
-            .ConstructUsing(dto => new Preference(
-            string.IsNullOrEmpty(dto.PreferenceKey) ? null : new PreferenceKey(dto.PreferenceKey),
-             dto.Name));
-
-
+                .ConstructUsing(dto => new Preference(dto.Name));
+            
             CreateMap<User, UserDto>()
              .BeforeMap((src, dst) => dst.UserKey = src.Key.Value);
 
             CreateMap<Preference, PreferenceDto>()
-                .BeforeMap((src, dst) => dst.PreferenceKey = src.Key.Value);
+                .BeforeMap((src, dst) => dst.PreferenceKey = src.ProxyKey.Value);
+            
             CreateMap<Cookbook, CookbookDto>()
               .ForMember(dest => dest.CookbookKey, opt => opt.MapFrom(src => src.Key.Value));
 
             CreateMap<Recipe, RecipeDto>()
-                .ForMember(dest => dest.RecipeKey, opt => opt.MapFrom(src => src.Key.Value));
+                .ForMember(dest => dest.RecipeKey, opt => opt.MapFrom(src => src.ProxyId.Value));
 
             CreateMap<CookbookDto, Cookbook>()
                 .BeforeMap((src, dst) =>
@@ -40,10 +37,14 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     if (string.IsNullOrEmpty(src.Name)) { throw new ApplicationException("Invalid cookbook name."); }
                 });
 
+            
+                     
+            CreateMap<PreferenceDto, Preference>()
+                .ConstructUsing(dto => new Preference(dto.Name));
+
             CreateMap<RecipeDto, Recipe>()
-            .ConstructUsing(dto => new Recipe(
-           string.IsNullOrEmpty(dto.RecipeKey) ? null : new RecipeKey(dto.RecipeKey),
-           dto.Name)).BeforeMap((src, dst) =>
+            .ConstructUsing(dto => new Recipe(dto.Name)).
+            BeforeMap((src, dst) =>
             {
                 if (string.IsNullOrEmpty(src.Name)) { throw new ApplicationException("Invalid recipe name."); }
             });

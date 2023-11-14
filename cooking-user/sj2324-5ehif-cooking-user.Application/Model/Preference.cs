@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using AutoMapper.Configuration.Annotations;
 
 namespace sj2324_5ehif_cooking_user.Application.Model;
 
@@ -15,6 +14,8 @@ public class Preference
         get => new(Key);
         set => Key = value.Value;
     }
+    
+    [Required(AllowEmptyStrings = false)]
     public string Name { get; }
     
     public Preference(string name)

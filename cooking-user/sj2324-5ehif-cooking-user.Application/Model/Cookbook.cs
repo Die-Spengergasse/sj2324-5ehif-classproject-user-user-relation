@@ -1,11 +1,4 @@
-﻿using Bogus;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
@@ -30,7 +23,7 @@ namespace sj2324_5ehif_cooking_user.Application.Model
 
         [Required] public CookbookKey Key { get; }
         [Required] public User Owner { get; set; }
-        [Required] [StringLength(100)] public string Name { get; set; }
+        [Required(AllowEmptyStrings = false)] [StringLength(100)] public string Name { get; set; }
         public bool Private { get; set; }
 
         public virtual IReadOnlyCollection<Recipe> Recipes => _recipes;
