@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Bogus;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +26,7 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             Key = new CookbookKey();
         }
 
-        public long Id { get; private set; }
+        [Key] public long Id { get; private set; }
 
         [Required] public CookbookKey Key { get; }
         [Required] public User Owner { get; set; }
@@ -35,6 +36,20 @@ namespace sj2324_5ehif_cooking_user.Application.Model
         public virtual IReadOnlyCollection<Recipe> Recipes => _recipes;
         public virtual IReadOnlyCollection<User> Collaborators => _collaborators;
 
+        public override bool Equals(object? obj) { 
+            if (obj == null) return false;
+            return Equals(obj as Cookbook);
+        }
+        public bool Equals(Cookbook other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            return
+                Owner == other.Owner &&
+                Name == other.Name &&
+                Private == other.Private &&
+                Recipes == other.Recipes &&
+                Collaborators == other.Collaborators;
+        }
         public void AddRecipe(Recipe recipe)
         {
             _recipes.Add(recipe);

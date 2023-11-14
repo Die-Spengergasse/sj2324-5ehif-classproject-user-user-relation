@@ -12,12 +12,12 @@ namespace sj2324_5ehif_cooking_user.Application.Model
     public class User
     {
         private List<Preference> _preferences = new();
-        public long Id { get; private set; }
+        [Key] public long Id { get; private set; }
         [Required] public UserKey Key { get; }
-        [Required] [StringLength(50)] public string Username { get; set; }
-        [Required] [StringLength(100)] public string Lastname { get; set; }
-        [Required] [StringLength(100)] public string Firstname { get; set; }
-        [Required] [EmailAddress] public string Email { get; set; }
+        [Required][StringLength(50)] public string Username { get; set; }
+        [Required][StringLength(100)] public string Lastname { get; set; }
+        [Required][StringLength(100)] public string Firstname { get; set; }
+        [Required][EmailAddress] public string Email { get; set; }
         public virtual IReadOnlyCollection<Preference> Preferences => _preferences;
 
 #pragma warning disable CS8618
@@ -32,6 +32,20 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             Lastname = lastname;
             Firstname = firstname;
             Email = email;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return base.Equals(obj as User);
+        }
+
+        public bool Equals(User other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            return Username == other.Username &&
+                Lastname == other.Lastname &&
+                Firstname == other.Firstname &&
+                Email == other.Email;
         }
         public void AddPreference(Preference preference)
         {
