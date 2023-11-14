@@ -10,12 +10,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
     <PackageReference Include="NetEncryptionLibrary" Version="5.16.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
     <PackageReference Include="SimpleISO7064" Version="1.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\sj2324-5ehif-cooking-user.Application\sj2324-5ehif-cooking-user.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers" />
   </ItemGroup>
 
 </Project>
