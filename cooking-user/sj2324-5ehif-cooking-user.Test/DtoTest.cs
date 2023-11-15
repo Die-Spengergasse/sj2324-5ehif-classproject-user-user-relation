@@ -29,27 +29,28 @@ public class DtoTest
                 new PreferenceDto { PreferenceKey = "PREF123", Name = "Vegetarian" }
             }
         };
-
+    
         var user = _mapper.Map<User>(userDto);
         Assert.NotNull(user);
         Assert.Equal(userDto.Username, user.Username);
         Assert.Equal(userDto.Lastname, user.Lastname);
         Assert.Equal(userDto.Firstname, user.Firstname);
         Assert.Equal(userDto.Email, user.Email);
-        Assert.Equal(userDto.Preferences.Count, user.Preferences.Count);
+        Assert.Equal(userDto.Preferences.First().PreferenceKey, user.Preferences.First().Key);
     }
     [Fact]
     public void AutoMapper_UserToUserDto_MapsKeyCorrectly()
     {
         var user = new User("testUser", "Doe", "John", "john.doe@example.com");
-        user.AddPreference(new Preference(new PreferenceKey("PRE1234567890X"), "Vegan"));
+        var preference = new Preference("Vegan");
+        user.AddPreference(preference);
 
         var userDto = _mapper.Map<UserDto>(user);
 
         Assert.NotNull(userDto);
-        Assert.Equal(user.Key.Value, userDto.UserKey);
+        Assert.Equal(user.ObjectKey.Value, userDto.UserKey);
         Assert.Single(userDto.Preferences);
-        Assert.Equal(user.Preferences.First().Key.Value, userDto.Preferences.First().PreferenceKey);
+        Assert.Equal(user.Preferences.First().Key, userDto.Preferences.First().PreferenceKey);
     }
 
     [Fact]
@@ -62,7 +63,7 @@ public class DtoTest
         };
         var recipe = _mapper.Map<Recipe>(recipeDto);
         Assert.NotNull(recipe);
-        Assert.Equal(recipeDto.RecipeKey, recipe.Key.Value);
+        Assert.Equal(recipeDto.RecipeKey, recipe.Id);
         Assert.Equal(recipeDto.Name, recipe.Name);
     }
 
@@ -78,6 +79,7 @@ public class DtoTest
 
         var cookbook = _mapper.Map<Cookbook>(cookbookDto);
         Assert.NotNull(cookbook);
+        Assert.Equal(cookbookDto.CookbookKey, cookbook.Key);
         Assert.Equal(cookbookDto.Name, cookbook.Name);
         Assert.Equal(cookbookDto.Private, cookbook.Private);
     }
@@ -93,6 +95,7 @@ public class DtoTest
         var preference = _mapper.Map<Preference>(preferenceDto);
         Assert.NotNull(preference);
         Assert.Equal(preferenceDto.Name, preference.Name);
+        Assert.Equal(preferenceDto.PreferenceKey, preference.Key);
     }
 
 
@@ -101,27 +104,30 @@ public class DtoTest
     {
         var user = new User("ownerUsername", "OwnerLastname", "OwnerFirstname", "owner@example.com");
         var cookbook = new Cookbook(user, "My Cookbook", false);
-        cookbook.AddRecipe(new Recipe(new RecipeKey("REC1234567890AB"), "My Recipe"));
+        var recipe = new Recipe("My Recipe");
+        cookbook.AddRecipe(recipe);
+        cookbook.AddUser(user);
 
         var cookbookDto = _mapper.Map<CookbookDto>(cookbook);
 
         Assert.NotNull(cookbookDto);
         Assert.Equal(cookbook.Name, cookbookDto.Name);
         Assert.Equal(cookbook.Private, cookbookDto.Private);
-        Assert.Equal(cookbook.Recipes.Count, cookbookDto.Recipes.Count);
-        Assert.Equal(cookbook.Key.Value, cookbookDto.CookbookKey);
+        Assert.Equal(cookbook.Recipes.First().Id, cookbookDto.Recipes.First().RecipeKey);
+        Assert.Equal(cookbook.Collaborators.First().Key, cookbookDto.Collaborators.First().UserKey);
+        Assert.Equal(cookbook.Key, cookbookDto.CookbookKey);
     }
 
     [Fact]
     public void AutoMapper_RecipeToRecipeDto_MapsCorrectly()
     {
-        var recipe = new Recipe(new RecipeKey("REC1234567890AB"), "My Recipe");
+        var recipe = new Recipe("My Recipe");
 
         var recipeDto = _mapper.Map<RecipeDto>(recipe);
 
         Assert.NotNull(recipeDto);
         Assert.Equal(recipe.Name, recipeDto.Name);
-        Assert.Equal(recipe.Key.Value, recipeDto.RecipeKey);
+        Assert.Equal(recipe.Id, recipeDto.RecipeKey);
     }
 
     [Fact]

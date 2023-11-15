@@ -54,13 +54,13 @@ public abstract class Key
             return false;
         }
 
-        return value.Substring(0, prefix.Length - 1) == prefix;
+        return value.Substring(0, prefix.Length ) == prefix;
     }
 
     public static bool CheckKey(string value, string? prefix=null)
     {
         var check = prefix == null ? true : CheckPrefix(value: value, prefix: prefix);
         return new Iso7064Factory().GetMod37Radix2()
-            .IsValid(value);
+            .IsValid(value) & check;
     }
 }

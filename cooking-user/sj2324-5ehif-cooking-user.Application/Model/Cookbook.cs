@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
@@ -16,12 +17,18 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             Owner = owner;
             Name = name;
             Private = @private;
-            Key = new CookbookKey();
+            KeyObject = new CookbookKey();
         }
 
         [Key] public long Id { get; private set; }
-
-        [Required] public CookbookKey Key { get; }
+        public string Key { get; set; }
+        [Required]
+        [NotMapped]
+        public CookbookKey KeyObject
+        {
+            get => new(Key);
+            set => Key = value.Value;
+        }
         [Required] public User Owner { get; set; }
         [Required(AllowEmptyStrings = false)] [StringLength(100)] public string Name { get; set; }
         public bool Private { get; set; }
