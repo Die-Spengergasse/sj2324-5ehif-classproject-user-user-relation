@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
@@ -22,19 +17,39 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             Owner = owner;
             Name = name;
             Private = @private;
-            Key = new CookbookKey();
+            KeyObject = new CookbookKey();
         }
 
-        public long Id { get; private set; }
-
-        [Required] public CookbookKey Key { get; }
+        [Key] public long Id { get; private set; }
+        public string Key { get; set; }
+        [Required]
+        [NotMapped]
+        public CookbookKey KeyObject
+        {
+            get => new(Key);
+            set => Key = value.Value;
+        }
         [Required] public User Owner { get; set; }
-        [Required] [StringLength(100)] public string Name { get; set; }
+        [Required(AllowEmptyStrings = false)] [StringLength(100)] public string Name { get; set; }
         public bool Private { get; set; }
 
         public virtual IReadOnlyCollection<Recipe> Recipes => _recipes;
         public virtual IReadOnlyCollection<User> Collaborators => _collaborators;
 
+        public override bool Equals(object? obj) { 
+            if (obj == null) return false;
+            return Equals(obj as Cookbook);
+        }
+        public bool Equals(Cookbook other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            return
+                Owner == other.Owner &&
+                Name == other.Name &&
+                Private == other.Private &&
+                Recipes == other.Recipes &&
+                Collaborators == other.Collaborators;
+        }
         public void AddRecipe(Recipe recipe)
         {
             _recipes.Add(recipe);

@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace sj2324_5ehif_cooking_user.Application.Model
-
+namespace sj2324_5ehif_cooking_user.Application.Model;
+public class Recipe
 {
-    public class Recipe
+    public string Id { get; set;}
+    
+    [NotMapped]
+    public RecipeKey ProxyId
     {
-        [Required] public Key Key { get; }
-        [Required] [StringLength(50)] public string Name { get; }
-
-        public Recipe(Key key, string name)
-        {
-            Key = key;
-            Name = name;
-        }
+        get => new(Id);
+        set => Id = value.Value;
     }
+        
+    [Required(AllowEmptyStrings = false)]
+    [StringLength(50)] 
+    public string Name { get; set; }
+    public Recipe(string name)
+    {
+        ProxyId = new RecipeKey();
+        Name = name;
+    }
+    
+    protected Recipe() { } 
 }
