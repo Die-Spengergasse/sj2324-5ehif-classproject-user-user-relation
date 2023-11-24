@@ -11,5 +11,8 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         public RecipeKey() : base(prefix: "REC", length: 15)
         {
         }
+        public RecipeKey(string key) : base(value:key,prefix: "REC", length: 15)
+        {
+        }
     }
 }

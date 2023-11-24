@@ -36,7 +36,7 @@ public class DtoTest
         Assert.Equal(userDto.Lastname, user.Lastname);
         Assert.Equal(userDto.Firstname, user.Firstname);
         Assert.Equal(userDto.Email, user.Email);
-        Assert.Equal(userDto.Preferences.First().PreferenceKey, user.Preferences.First().Key);
+        Assert.Equal(userDto.Preferences.First().PreferenceKey, user.Preferences.First().Id);
     }
     [Fact]
     public void AutoMapper_UserToUserDto_MapsKeyCorrectly()
@@ -50,7 +50,7 @@ public class DtoTest
         Assert.NotNull(userDto);
         Assert.Equal(user.ObjectKey.Value, userDto.UserKey);
         Assert.Single(userDto.Preferences);
-        Assert.Equal(user.Preferences.First().Key, userDto.Preferences.First().PreferenceKey);
+        Assert.Equal(user.Preferences.First().Id, userDto.Preferences.First().PreferenceKey);
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class DtoTest
         var preference = _mapper.Map<Preference>(preferenceDto);
         Assert.NotNull(preference);
         Assert.Equal(preferenceDto.Name, preference.Name);
-        Assert.Equal(preferenceDto.PreferenceKey, preference.Key);
+        Assert.Equal(preferenceDto.PreferenceKey, preference.Id);
     }
 
 

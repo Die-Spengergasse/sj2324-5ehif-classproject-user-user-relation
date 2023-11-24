@@ -15,7 +15,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     var list = new List<Preference>();
                     foreach (var preference in src.Preferences)
                     {
-                        dst.AddPreference(new Preference(preference.Name){Key = preference.PreferenceKey});
+                        dst.AddPreference(new Preference(preference.Name){Id = preference.PreferenceKey});
                         
                     }
                     
@@ -42,7 +42,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                 });
 
             CreateMap<PreferenceDto, Preference>()
-                .ConstructUsing(dto => new Preference(dto.Name) { Key = dto.PreferenceKey });
+                .ConstructUsing(dto => new Preference(dto.Name) { Id = dto.PreferenceKey });
 
             CreateMap<User, UserDto>()
                 .BeforeMap((src, dst) => dst.UserKey = src.ObjectKey.Value)
