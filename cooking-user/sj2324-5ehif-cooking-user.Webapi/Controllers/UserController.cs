@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -149,18 +147,40 @@ public class UserController : ControllerBase
         }
     }
 
-
     [Authorize]
-    [HttpGet("test")]
-    public async Task<ActionResult<string[]>> RegisterUser()
+    [HttpPut("preferences")]
+    public async Task<IActionResult> UpdatePreferences([FromBody] List<Preference> preferenceNames)
     {
-        string[] staticValues =
+        try
         {
-            "Value1",
-            "Value2",
-            "Value3"
-        };
+            var username = HttpContext.User.Identity?.Name; 
 
-        return Ok(staticValues);
+            var user = await _context.Users.Include(u => u.Preferences).FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                _logger.LogWarning("User not found while updating preferences for: {Username}", username);
+                return NotFound("User not found");
+            }
+            
+            var preferencesToAdd = preferenceNames.Except(user.Preferences).ToList();
+            user.AddPreferenceRange(preferencesToAdd);
+            
+            var emptyPreferences = user.Preferences.Where(p => string.IsNullOrEmpty(p.Name)).ToList();//check which preferences should be removed
+            foreach (var emptyPreference in emptyPreferences)
+            {
+                user.RemovePreference(emptyPreference);
+            }
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("User preferences updated for {Username}", username);
+            return Ok("User preferences updated successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during preference update");
+            return StatusCode(500, "Preference update failed");
+        }
     }
 }
