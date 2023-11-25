@@ -27,7 +27,7 @@ public class Startup
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddScoped<IPasswordUtils, PasswordUtils>();
-        
+
         services.AddSingleton(new JwtUtils(Configuration));
 
         services.AddAuthentication(options =>

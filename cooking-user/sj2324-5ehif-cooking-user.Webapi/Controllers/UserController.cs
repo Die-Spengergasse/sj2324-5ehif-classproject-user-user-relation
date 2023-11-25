@@ -7,21 +7,6 @@ using sj2324_5ehif_cooking_user.Webapi.Services;
 
 namespace sj2324_5ehif_cooking_user.Webapi.Controllers;
 
-public record RegisterModel
-{
-    public string? Username { get; set; }
-    public string? Lastname { get; set; }
-    public string? Firstname { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-}
-
-public record LoginModel
-{
-    public string? Username { get; set; }
-    public string? Password { get; set; }
-}
-
 public record DeleteUserModel
 {
     public string? Username { get; set; }
@@ -29,111 +14,45 @@ public record DeleteUserModel
     public string? Password { get; set; }
 }
 
-
 [ApiController]
-[Route("auth/[controller]")]
+[Route("user/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly UserContext _context;
-    private readonly JwtUtils _jwtUtils;
     private readonly ILogger<UserController> _logger;
     private readonly IPasswordUtils _passwordUtils;
 
-    public UserController(UserContext context, ILogger<UserController> logger, JwtUtils jwtUtils, IPasswordUtils passwordUtils)
+    public UserController(UserContext context, ILogger<UserController> logger, IPasswordUtils passwordUtils)
     {
         _context = context;
         _logger = logger;
-        _jwtUtils = jwtUtils;
         _passwordUtils = passwordUtils;
     }
 
-    [AllowAnonymous]
-    [HttpPost]
-    [Route("registration")]
-    public async Task<IActionResult> Register(RegisterModel userDto)
-    {
-        try
-        {
-            _logger.LogInformation("Attempting user registration for {Username} with email {Email}", userDto.Username, userDto.Email);
-
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username || u.Email == userDto.Email);
-            if (existingUser != null)
-            {
-                _logger.LogWarning("Username or Email already exists");
-                return Conflict("Username or Email already exists");
-            }
-            
-            var hashedPassword = _passwordUtils.HashPassword(userDto.Password);
-            var newUser = new User(userDto.Username, userDto.Lastname, userDto.Firstname, userDto.Email, hashedPassword);
-            
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation("User registration successful for {Username}", userDto.Username);
-            return Ok("Registration successful");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred during registration");
-            return StatusCode(500, "Registration failed");
-        }
-    }
-
-    [HttpPost]
-    [Route("login")]
-    public async Task<IActionResult> Login(LoginModel loginDto)
-    {
-        try
-        {
-            _logger.LogInformation("Attempting user login for {Username}", loginDto.Username);
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-            if (user == null)
-            {
-                _logger.LogWarning("User not found for login: {Username}", loginDto.Username);
-                return NotFound("User not found");
-            }
-        
-            var hashedPassword = _passwordUtils.HashPassword(loginDto.Password);
-            if (user.Password != hashedPassword)
-            {
-                _logger.LogWarning("Invalid credentials for user: {Username}", loginDto.Username);
-                return Unauthorized("Invalid credentials");
-            }
-
-            var token = _jwtUtils.GenerateJwtToken(loginDto.Username);
-            _logger.LogInformation("User login successful for {Username}", loginDto.Username);
-            return Ok(new { token });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred during login");
-            return StatusCode(500, "Login failed");
-        }
-    }
-    
     [Authorize]
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser(DeleteUserModel deleteDto)
     {
         try
         {
-            _logger.LogInformation("Attempting to delete user with username: {Username} and email: {Email}", deleteDto.Username, deleteDto.Email);
-            
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == deleteDto.Username || u.Email == deleteDto.Email);
+            _logger.LogInformation("Attempting to delete user with username: {Username} and email: {Email}",
+                deleteDto.Username, deleteDto.Email);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+                u.Username == deleteDto.Username || u.Email == deleteDto.Email);
             if (user == null)
             {
                 _logger.LogWarning("User not found for deletion: {Username}", deleteDto.Username);
                 return NotFound("User not found");
             }
-            
+
             var hashedPassword = _passwordUtils.HashPassword(deleteDto.Password);
             if (user.Password != hashedPassword)
             {
                 _logger.LogWarning("Invalid credentials for user deletion: {Username}", deleteDto.Username);
                 return Unauthorized("Invalid credentials");
             }
-            
+
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
@@ -153,24 +72,24 @@ public class UserController : ControllerBase
     {
         try
         {
-            var username = HttpContext.User.Identity?.Name; 
+            var username = HttpContext.User.Identity?.Name;
 
-            var user = await _context.Users.Include(u => u.Preferences).FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.Include(u => u.Preferences)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
             {
                 _logger.LogWarning("User not found while updating preferences for: {Username}", username);
                 return NotFound("User not found");
             }
-            
+
             var preferencesToAdd = preferenceNames.Except(user.Preferences).ToList();
             user.AddPreferenceRange(preferencesToAdd);
-            
-            var emptyPreferences = user.Preferences.Where(p => string.IsNullOrEmpty(p.Name)).ToList();//check which preferences should be removed
-            foreach (var emptyPreference in emptyPreferences)
-            {
-                user.RemovePreference(emptyPreference);
-            }
+
+            var emptyPreferences =
+                user.Preferences.Where(p => string.IsNullOrEmpty(p.Name))
+                    .ToList(); //check which preferences should be removed
+            foreach (var emptyPreference in emptyPreferences) user.RemovePreference(emptyPreference);
 
             await _context.SaveChangesAsync();
 
