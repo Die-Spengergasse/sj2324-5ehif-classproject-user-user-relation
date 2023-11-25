@@ -24,6 +24,14 @@ public record LoginModel
     public string? Password { get; set; }
 }
 
+public record DeleteUserModel
+{
+    public string? Username { get; set; }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
+}
+
+
 [ApiController]
 [Route("auth/[controller]")]
 public class UserController : ControllerBase
@@ -105,6 +113,42 @@ public class UserController : ControllerBase
             return StatusCode(500, "Login failed");
         }
     }
+    
+    [Authorize]
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteUser(DeleteUserModel deleteDto)
+    {
+        try
+        {
+            _logger.LogInformation("Attempting to delete user with username: {Username} and email: {Email}", deleteDto.Username, deleteDto.Email);
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == deleteDto.Username || u.Email == deleteDto.Email);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for deletion: {Username}", deleteDto.Username);
+                return NotFound("User not found");
+            }
+            
+            var hashedPassword = _passwordUtils.HashPassword(deleteDto.Password);
+            if (user.Password != hashedPassword)
+            {
+                _logger.LogWarning("Invalid credentials for user deletion: {Username}", deleteDto.Username);
+                return Unauthorized("Invalid credentials");
+            }
+            
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("User deletion successful for {Username}", deleteDto.Username);
+            return Ok("User deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during user deletion");
+            return StatusCode(500, "User deletion failed");
+        }
+    }
+
 
     [Authorize]
     [HttpGet("test")]
