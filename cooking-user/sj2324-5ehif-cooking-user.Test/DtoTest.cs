@@ -41,7 +41,7 @@ public class DtoTest
     [Fact]
     public void AutoMapper_UserToUserDto_MapsKeyCorrectly()
     {
-        var user = new User("testUser", "Doe", "John", "john.doe@example.com");
+        var user = new User("testUser", "Doe", "John", "john.doe@example.com", "qwerty12345");
         var preference = new Preference("Vegan");
         user.AddPreference(preference);
 
@@ -102,7 +102,7 @@ public class DtoTest
     [Fact]
     public void AutoMapper_CookbookToCookbookDto_MapsCorrectly()
     {
-        var user = new User("ownerUsername", "OwnerLastname", "OwnerFirstname", "owner@example.com");
+        var user = new User("ownerUsername", "OwnerLastname", "OwnerFirstname", "owner@example.com", "qwerty12345");
         var cookbook = new Cookbook(user, "My Cookbook", false);
         var recipe = new Recipe("My Recipe");
         cookbook.AddRecipe(recipe);

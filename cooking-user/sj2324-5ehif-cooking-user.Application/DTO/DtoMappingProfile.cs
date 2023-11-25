@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using sj2324_5ehif_cooking_user.Application.Model;
 using ApplicationException = System.ApplicationException;
 
@@ -18,7 +19,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                         dst.AddPreference(new Preference(preference.Name){ Key = preference.PreferenceKey});
                         
                     }
-                    
+                    dst.Password = src.Password;
                     dst.Key = src.UserKey;
                     if (string.IsNullOrEmpty(src.Username))
                     {
@@ -40,7 +41,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                         throw new ApplicationException("Invalid email");
                     }
                 });
-
+            
             CreateMap<PreferenceDto, Preference>()
                 .ConstructUsing(dto => new Preference(dto.Name) { Key = dto.PreferenceKey });
 
@@ -63,7 +64,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     dst.Key = src.CookbookKey;
                     foreach (var collaborator in src.Collaborators)
                     {
-                        dst.AddUser(new User(username:collaborator.Username,lastname:collaborator.Firstname,firstname:collaborator.Lastname,email:collaborator.Email){Key = collaborator.UserKey});
+                        dst.AddUser(new User(username:collaborator.Username,lastname:collaborator.Firstname,firstname:collaborator.Lastname,email:collaborator.Email, password:collaborator.Password){Key = collaborator.UserKey});
                     }
 
                     foreach (var recipe in src.Recipes)
