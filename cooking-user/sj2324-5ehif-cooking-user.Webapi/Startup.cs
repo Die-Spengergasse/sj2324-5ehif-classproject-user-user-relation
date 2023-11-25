@@ -27,6 +27,7 @@ public class Startup
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddScoped<IPasswordUtils, PasswordUtils>();
+        services.AddAutoMapper(typeof(Startup));
 
         services.AddSingleton(new JwtUtils(Configuration));
 
