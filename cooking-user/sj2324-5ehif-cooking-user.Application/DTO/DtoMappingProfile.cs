@@ -15,7 +15,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     var list = new List<Preference>();
                     foreach (var preference in src.Preferences)
                     {
-                        dst.AddPreference(new Preference(preference.Name){Id = preference.PreferenceKey});
+                        dst.AddPreference(new Preference(preference.Name){ Key = preference.PreferenceKey});
                         
                     }
                     
@@ -42,7 +42,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                 });
 
             CreateMap<PreferenceDto, Preference>()
-                .ConstructUsing(dto => new Preference(dto.Name) { Id = dto.PreferenceKey });
+                .ConstructUsing(dto => new Preference(dto.Name) { Key = dto.PreferenceKey });
 
             CreateMap<User, UserDto>()
                 .BeforeMap((src, dst) => dst.UserKey = src.ObjectKey.Value)
@@ -68,7 +68,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
 
                     foreach (var recipe in src.Recipes)
                     {
-                        dst.AddRecipe(new Recipe(name:recipe.Name){Id=recipe.RecipeKey});
+                        dst.AddRecipe(new Recipe(name:recipe.Name){ Key = recipe.RecipeKey});
                     }
                     if (string.IsNullOrEmpty(src.Name))
                     {
@@ -78,7 +78,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
 
 
             CreateMap<RecipeDto, Recipe>()
-                .ConstructUsing(dto => new Recipe(dto.Name){Id = dto.RecipeKey}).BeforeMap((src, dst) =>
+                .ConstructUsing(dto => new Recipe(dto.Name){Key = dto.RecipeKey}).BeforeMap((src, dst) =>
                 {
                     if (string.IsNullOrEmpty(src.Name))
                     {
