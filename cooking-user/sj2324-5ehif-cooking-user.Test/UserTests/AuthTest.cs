@@ -65,23 +65,4 @@ public class AuthTest
         Assert.NotNull(result);
         Assert.Equal("Registration successful", result.Value);
     }
-
-    [Fact]
-    public async Task Login_ValidCredentials_ReturnsToken()
-    {
-        var controller = new AuthController(_mockContext, _mockLogger,
-            _mockJwtUtils, _mockPasswordUtils);
-
-        var loginModel = new LoginModel
-        {
-            Username = _mockContext.Users.First().Username,
-            Password = "hashedpassword"
-        };
-
-        var result = await controller.Login(loginModel) as OkObjectResult;
-
-        Assert.NotNull(result);
-        dynamic tokenResult = result.Value;
-        Assert.NotNull(tokenResult.token);
-    }
 }

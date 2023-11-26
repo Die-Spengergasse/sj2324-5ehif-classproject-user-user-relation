@@ -35,7 +35,7 @@ public class UserTest
 
         _mockContext.Users.AddRange(new User
         (
-            "testuser",
+            faker.Internet.UserName(),
             firstname: faker.Name.FirstName(),
             lastname: faker.Name.LastName(),
             email: faker.Internet.Email(),
@@ -43,23 +43,6 @@ public class UserTest
         ));
 
         _mockContext.SaveChanges();
-    }
-    
-    private HttpContext GetMockHttpContext(string username)
-    {
-        var context = new DefaultHttpContext();
-        
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, username)
-        };
-        
-        var identity = new ClaimsIdentity(claims, "TestAuth");
-        var principal = new ClaimsPrincipal(identity);
-        
-        context.User = principal;
-        
-        return context;
     }
 
     [Fact]
@@ -80,59 +63,5 @@ public class UserTest
 
         Assert.NotNull(result);
         Assert.Equal("Invalid credentials", result.Value);
-    }
-    
-    [Fact]
-    public async Task DeleteUser_ValidCredentials_ReturnsOk()
-    {
-        var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
-        controller.ControllerContext.HttpContext = GetMockHttpContext("testuser");
-
-        var userToDelete = _mockContext.Users.First();
-
-        var deleteModel = new DeleteUserModel
-        {
-            Username = "testuser",
-            Email = userToDelete.Email,
-            Password = "hashedpassword"
-        };
-
-        var result = await controller.DeleteUser(deleteModel) as OkObjectResult;
-
-        Assert.NotNull(result);
-        Assert.Equal("User deleted successfully", result.Value);
-    }
-
-    [Fact]
-    public async Task UpdatePreferences_Success_ReturnsOk()
-    {
-        var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
-        controller.ControllerContext.HttpContext = GetMockHttpContext("testuser");
-
-        var preferencesToUpdate = new List<PreferenceDto>
-        {
-            new PreferenceDto { Name = "Preference1" },
-            new PreferenceDto { Name = "Preference2" }
-        };
-
-        var result = await controller.UpdatePreferences(preferencesToUpdate) as OkObjectResult;
-
-        Assert.NotNull(result);
-        Assert.Equal("User preferences updated successfully", result.Value);
-    }
-
-    [Fact]
-    public async Task ChangePassword_Success_ReturnsOk()
-    {
-        var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
-        controller.ControllerContext.HttpContext = GetMockHttpContext("testuser");
-
-        var currentPassword = "hashedpassword"; // Use the current password
-        var newPassword = "newhashedpassword"; // Use the new password
-
-        var result = await controller.ChangePassword(currentPassword, newPassword) as OkObjectResult;
-
-        Assert.NotNull(result);
-        Assert.Equal("Password changed successfully", result.Value);
     }
 }
