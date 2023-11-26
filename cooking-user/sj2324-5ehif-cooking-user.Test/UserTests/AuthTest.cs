@@ -22,6 +22,7 @@ public class AuthTest
     {
         var options = new DbContextOptionsBuilder<UserContext>()
             .UseInMemoryDatabase("TestDatabase")
+            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
             .Options;
 
         _mockContext = new UserContext(options);
@@ -31,9 +32,9 @@ public class AuthTest
         _mockJwtUtils = new JwtUtils(_mockConfiguration);
         _mockPasswordUtils = new PasswordUtils();
 
-        _mockContext.Users.AddRange(new User
+        _mockContext.Users.Add(new User
         (
-            faker.Internet.UserName(),
+            "testuser",
             firstname: faker.Name.FirstName(),
             lastname: faker.Name.LastName(),
             email: faker.Internet.Email(),
