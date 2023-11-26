@@ -1,7 +1,5 @@
-using System.Security.Claims;
 using AutoMapper;
 using Bogus;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -49,7 +47,7 @@ public class UserTest
     public async Task DeleteUser_InvalidCredentials_ReturnsUnauthorized()
     {
         var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
-        
+
         var userToDelete = _mockContext.Users.First();
 
         var deleteModel = new DeleteUserModel

@@ -9,23 +9,17 @@ using sj2324_5ehif_cooking_user.Webapi.Services;
 
 namespace sj2324_5ehif_cooking_user.Webapi.Controllers;
 
-public record DeleteUserModel
-{
-    public string? Username { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-}
-
 [ApiController]
 [Route("user/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly UserContext _context;
     private readonly ILogger<UserController> _logger;
-    private readonly IPasswordUtils _passwordUtils;
     private readonly IMapper _mapper;
+    private readonly IPasswordUtils _passwordUtils;
 
-    public UserController(UserContext context, ILogger<UserController> logger, IPasswordUtils passwordUtils, IMapper mapper)
+    public UserController(UserContext context, ILogger<UserController> logger, IPasswordUtils passwordUtils,
+        IMapper mapper)
     {
         _context = context;
         _logger = logger;
@@ -111,7 +105,7 @@ public class UserController : ControllerBase
             return StatusCode(500, "Preference update failed");
         }
     }
-    
+
     [Authorize]
     [HttpPut("changePassword")]
     public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword)

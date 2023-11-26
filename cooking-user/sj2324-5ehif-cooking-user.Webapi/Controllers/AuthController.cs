@@ -1,26 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using sj2324_5ehif_cooking_user.Application.DTO;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
 using sj2324_5ehif_cooking_user.Application.Model;
 using sj2324_5ehif_cooking_user.Webapi.Services;
 
 namespace sj2324_5ehif_cooking_user.Webapi.Controllers;
-
-public record RegisterModel
-{
-    public string? Username { get; set; }
-    public string? Lastname { get; set; }
-    public string? Firstname { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-}
-
-public record LoginModel
-{
-    public string? Username { get; set; }
-    public string? Password { get; set; }
-}
 
 [ApiController]
 [Route("auth/[controller]")]
@@ -52,7 +38,7 @@ public class AuthController : ControllerBase
 
             var existingUser =
                 await _context.Users.FirstOrDefaultAsync(
-                    u => u.Username == userDto.Username || u.Email == userDto.Email);
+                    u => u.Username == userDto.Username && u.Email == userDto.Email);
             if (existingUser != null)
             {
                 _logger.LogWarning("Username or Email already exists");

@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using Bogus;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +19,7 @@ public class JwtTest
             {
                 new KeyValuePair<string, string>("Jwt:Key", new Faker().Random.AlphaNumeric(32)),
                 new KeyValuePair<string, string>("Jwt:Issuer", new Faker().Company.CompanyName()),
-                new KeyValuePair<string, string>("Jwt:Audience", new Faker().Company.CompanyName()),
+                new KeyValuePair<string, string>("Jwt:Audience", new Faker().Company.CompanyName())
             }!)
             .Build();
 
@@ -48,7 +47,7 @@ public class JwtTest
         var claim = Assert.Single(token.Claims.ToList(), c => c.Value == username);
         Assert.NotNull(claim);
     }
-    
+
     //helper method
     private bool ValidateToken(string jwtToken)
     {
