@@ -3,15 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model;
 
-public class Recipe
+public class Recipe : IEntity
 {
-    public string Id { get; set; }
+    [Key] public string Key { get; set; }
+
+
 
     [NotMapped]
     public RecipeKey ProxyId
     {
-        get => new(Id);
-        set => Id = value.Value;
+        get => new(Key);
+        set => Key = value.Value;
     }
 
     [Required(AllowEmptyStrings = false)]
@@ -24,9 +26,9 @@ public class Recipe
         Name = name;
     }
 
-    public Recipe(string name, string id)
+    public Recipe(string name, string key)
     {
-        Id = id;
+        Key = key;
         Name = name;
     }
 

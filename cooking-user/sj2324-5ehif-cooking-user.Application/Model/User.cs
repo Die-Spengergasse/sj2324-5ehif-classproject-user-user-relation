@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
-    public class User
+    public class User :IEntity
     {
         private List<Preference> _preferences = new();
         [Key] public long Id { get; private set; }

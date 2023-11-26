@@ -36,7 +36,7 @@ public class DtoTest
         Assert.Equal(userDto.Lastname, user.Lastname);
         Assert.Equal(userDto.Firstname, user.Firstname);
         Assert.Equal(userDto.Email, user.Email);
-        Assert.Equal(userDto.Preferences.First().PreferenceKey, user.Preferences.First().Id);
+        Assert.Equal(userDto.Preferences.First().PreferenceKey, user.Preferences.First().Key);
     }
     [Fact]
     public void AutoMapper_UserToUserDto_MapsKeyCorrectly()
@@ -50,7 +50,7 @@ public class DtoTest
         Assert.NotNull(userDto);
         Assert.Equal(user.ObjectKey.Value, userDto.UserKey);
         Assert.Single(userDto.Preferences);
-        Assert.Equal(user.Preferences.First().Id, userDto.Preferences.First().PreferenceKey);
+        Assert.Equal(user.Preferences.First().Key, userDto.Preferences.First().PreferenceKey);
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class DtoTest
         };
         var recipe = _mapper.Map<Recipe>(recipeDto);
         Assert.NotNull(recipe);
-        Assert.Equal(recipeDto.RecipeKey, recipe.Id);
+        Assert.Equal(recipeDto.RecipeKey, recipe.Key);
         Assert.Equal(recipeDto.Name, recipe.Name);
     }
 
@@ -95,7 +95,7 @@ public class DtoTest
         var preference = _mapper.Map<Preference>(preferenceDto);
         Assert.NotNull(preference);
         Assert.Equal(preferenceDto.Name, preference.Name);
-        Assert.Equal(preferenceDto.PreferenceKey, preference.Id);
+        Assert.Equal(preferenceDto.PreferenceKey, preference.Key);
     }
 
 
@@ -113,7 +113,7 @@ public class DtoTest
         Assert.NotNull(cookbookDto);
         Assert.Equal(cookbook.Name, cookbookDto.Name);
         Assert.Equal(cookbook.Private, cookbookDto.Private);
-        Assert.Equal(cookbook.Recipes.First().Id, cookbookDto.Recipes.First().RecipeKey);
+        Assert.Equal(cookbook.Recipes.First().Key, cookbookDto.Recipes.First().RecipeKey);
         Assert.Equal(cookbook.Collaborators.First().Key, cookbookDto.Collaborators.First().UserKey);
         Assert.Equal(cookbook.Key, cookbookDto.CookbookKey);
     }
@@ -127,7 +127,7 @@ public class DtoTest
 
         Assert.NotNull(recipeDto);
         Assert.Equal(recipe.Name, recipeDto.Name);
-        Assert.Equal(recipe.Id, recipeDto.RecipeKey);
+        Assert.Equal(recipe.Key, recipeDto.RecipeKey);
     }
 
     [Fact]
