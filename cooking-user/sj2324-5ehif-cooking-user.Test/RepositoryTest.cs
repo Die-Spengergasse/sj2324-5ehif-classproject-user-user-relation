@@ -13,6 +13,7 @@ using NUnit.Framework;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
 using Bogus;
 using Assert = NUnit.Framework.Assert;
+using System.Text;
 
 namespace sj2324_5ehif_cooking_user.Test
 {
@@ -27,6 +28,17 @@ namespace sj2324_5ehif_cooking_user.Test
 
         }
 
+        public static string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
         public static User GenerateUser()
         {
             var faker = new Faker<User>()
@@ -34,11 +46,15 @@ namespace sj2324_5ehif_cooking_user.Test
                         username: f.Person.UserName,
                         firstname: f.Person.FirstName,
                         lastname: f.Person.LastName,
-                        email: f.Person.Email
+                        email: f.Person.Email,
+                        password: CreatePassword(8)
+
                     )
                 );
             return faker.Generate();
         }
+
+
 
 
         [Fact]
