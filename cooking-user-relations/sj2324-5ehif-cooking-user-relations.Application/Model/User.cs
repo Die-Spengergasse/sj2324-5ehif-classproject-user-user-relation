@@ -20,13 +20,14 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             set => Id = value.Value;
         }
 
-        public UserKey Key { get; }
         [Required] [StringLength(100)] public string Name { get; }
 
-        public User(UserKey key, string name)
+        public User(String key, string name)
         {
-            ObjectKey = key;
+            Id = key;
             Name = name;
         }
+
+     
     }
 }
