@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using sj2324_5ehif_cooking_user.Application.Model;
 using ApplicationException = System.ApplicationException;
 
@@ -15,10 +16,10 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     var list = new List<Preference>();
                     foreach (var preference in src.Preferences)
                     {
-                        dst.AddPreference(new Preference(preference.Name){Key = preference.PreferenceKey});
+                        dst.AddPreference(new Preference(preference.Name){ Key = preference.PreferenceKey});
                         
                     }
-                    
+                    dst.Password = src.Password;
                     dst.Key = src.UserKey;
                     if (string.IsNullOrEmpty(src.Username))
                     {
@@ -40,7 +41,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                         throw new ApplicationException("Invalid email");
                     }
                 });
-
+            
             CreateMap<PreferenceDto, Preference>()
                 .ConstructUsing(dto => new Preference(dto.Name) { Key = dto.PreferenceKey });
 
@@ -63,12 +64,12 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                     dst.Key = src.CookbookKey;
                     foreach (var collaborator in src.Collaborators)
                     {
-                        dst.AddUser(new User(username:collaborator.Username,lastname:collaborator.Firstname,firstname:collaborator.Lastname,email:collaborator.Email){Key = collaborator.UserKey});
+                        dst.AddUser(new User(username:collaborator.Username,lastname:collaborator.Firstname,firstname:collaborator.Lastname,email:collaborator.Email, password:collaborator.Password){Key = collaborator.UserKey});
                     }
 
                     foreach (var recipe in src.Recipes)
                     {
-                        dst.AddRecipe(new Recipe(name:recipe.Name){Id=recipe.RecipeKey});
+                        dst.AddRecipe(new Recipe(name:recipe.Name){ Key = recipe.RecipeKey});
                     }
                     if (string.IsNullOrEmpty(src.Name))
                     {
@@ -78,7 +79,7 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
 
 
             CreateMap<RecipeDto, Recipe>()
-                .ConstructUsing(dto => new Recipe(dto.Name){Id = dto.RecipeKey}).BeforeMap((src, dst) =>
+                .ConstructUsing(dto => new Recipe(dto.Name){Key = dto.RecipeKey}).BeforeMap((src, dst) =>
                 {
                     if (string.IsNullOrEmpty(src.Name))
                     {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
-    public class User
+    public class User :IEntity
     {
         private List<Preference> _preferences = new();
         [Key] public long Id { get; private set; }
@@ -21,6 +21,8 @@ namespace sj2324_5ehif_cooking_user.Application.Model
         [Required] [StringLength(100)] public string Lastname { get; set; }
         [Required] [StringLength(100)] public string Firstname { get; set; }
         [Required] [EmailAddress] public string Email { get; set; }
+        [Required] public string Password { get; set; }
+
         public virtual IReadOnlyCollection<Preference> Preferences => _preferences;
 
 #pragma warning disable CS8618
@@ -28,13 +30,14 @@ namespace sj2324_5ehif_cooking_user.Application.Model
         {
         }
 #pragma warning restore CS8618
-        public User(string username, string lastname, string firstname, string email)
+        public User(string username, string lastname, string firstname, string email, string password)
         {
             ObjectKey = new UserKey();
             Username = username;
             Lastname = lastname;
             Firstname = firstname;
             Email = email;
+            Password = password;
         }
 
         public override bool Equals(object? obj)
@@ -48,7 +51,8 @@ namespace sj2324_5ehif_cooking_user.Application.Model
             return Username == other.Username &&
                    Lastname == other.Lastname &&
                    Firstname == other.Firstname &&
-                   Email == other.Email;
+                   Email == other.Email && 
+                   Password == other.Password;
         }
 
         public void AddPreference(Preference preference)

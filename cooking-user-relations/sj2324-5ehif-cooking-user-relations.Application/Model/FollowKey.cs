@@ -11,6 +11,9 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         public FollowKey() : base(prefix: "FOL", length: 15)
         { 
         }
+        public FollowKey(string value) : base(value:value,prefix: "FOL", length: 15)
+        { 
+        }
     }
 }
 

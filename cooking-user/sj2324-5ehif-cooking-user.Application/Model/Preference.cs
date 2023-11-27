@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model;
 
-public class Preference
+public class Preference : IEntity
 {
     [Key]
     public string Key { get; set; }
@@ -21,6 +21,11 @@ public class Preference
     public Preference(string name)
     {
         ProxyKey = new PreferenceKey();
+        Name = name;
+    }
+    public Preference(string name,string id)
+    {
+        Key = id;
         Name = name;
     }
     

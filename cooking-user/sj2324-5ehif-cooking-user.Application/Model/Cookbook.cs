@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sj2324_5ehif_cooking_user.Application.Model
 {
-    public class Cookbook
+    public class Cookbook :IEntity
     {
         private List<Recipe> _recipes = new();
         private List<User> _collaborators = new();
