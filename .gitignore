@@ -492,3 +492,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,rider
+/cooking-user/.idea/
+/.idea/
+/cooking-user-relations/.idea/
+/.github/.idea/

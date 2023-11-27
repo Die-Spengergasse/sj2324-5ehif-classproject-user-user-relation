@@ -10,11 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="NetEncryptionLibrary" Version="5.16.0" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="SimpleISO7064" Version="1.0.0" />
-    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit" Version="2.6.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -27,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\sj2324-5ehif-cooking-user.Application\sj2324-5ehif-cooking-user.Application.csproj" />
+    <ProjectReference Include="..\sj2324-5ehif-cooking-user.Webapi\sj2324-5ehif-cooking-user.Webapi.csproj" />
   </ItemGroup>
 
 </Project>
