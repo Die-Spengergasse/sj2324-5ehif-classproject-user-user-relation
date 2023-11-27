@@ -20,8 +20,6 @@ namespace sj2324_5ehif_cooking_user.Test
 
         protected readonly UserContext _context;
 
-        protected readonly UserRepository _userRepository;
-
         public DatabaseTest()
         {
 
@@ -36,8 +34,6 @@ namespace sj2324_5ehif_cooking_user.Test
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-
-            _userRepository = new UserRepository(_context);
         }
 
 
