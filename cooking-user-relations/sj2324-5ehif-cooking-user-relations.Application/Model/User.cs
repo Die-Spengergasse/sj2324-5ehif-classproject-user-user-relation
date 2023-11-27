@@ -10,7 +10,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
     public class User
     {
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [Required]
         [NotMapped]
@@ -20,14 +20,14 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             set => Id = value.Value;
         }
 
-        [Required] [StringLength(100)] public string Name { get; }
+        [Required][StringLength(100)] public string Name { get; set; }
 
-        public User(String key, string name)
+        public User(String id, string name)
         {
-            Id = key;
+            Id = id;
             Name = name;
         }
 
-     
+
     }
 }
