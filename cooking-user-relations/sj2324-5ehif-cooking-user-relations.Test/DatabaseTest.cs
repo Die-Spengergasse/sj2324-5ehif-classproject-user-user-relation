@@ -22,13 +22,11 @@ namespace sj2324_5ehif_cooking_user_relations.Test
         public DatabaseTest()
         {
 
-            _connection = new SqliteConnection("DataSource=:memory:");
+            var options = new DbContextOptionsBuilder<UserRelationsContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
 
-            _connection.Open();
-
-            _options = new DbContextOptionsBuilder<UserRelationsContext>().UseSqlite(_connection).Options;
-
-            _context = new UserRelationsContext(_options);
+            _context = new UserRelationsContext(options);
 
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
@@ -38,7 +36,7 @@ namespace sj2324_5ehif_cooking_user_relations.Test
 
         public void Dispose()
         {
-            _connection.Dispose();
+            _context.Dispose();
         }
     }
 }
