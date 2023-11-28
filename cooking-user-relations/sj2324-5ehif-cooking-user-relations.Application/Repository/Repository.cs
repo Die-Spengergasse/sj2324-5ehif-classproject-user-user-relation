@@ -20,7 +20,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Repository
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<(bool success, string message, T entity)> GetByIdAsync(object id)
+        public async Task<(bool success, string message, T? entity)> GetByIdAsync(object id)
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 
@@ -30,7 +30,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Repository
 
                 if (entity == null)
                 {
-                    return (false, $"No entity with ID {id} found.", null);
+                    return (false, $"{typeof(T)} id {id} not found.", null);
                 }
                 else
                 {
@@ -43,9 +43,8 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Repository
             }
         }
 
-        public virtual async Task<(bool success, string message, List<T> entity)> GetAllAsync()
+        public virtual async Task<(bool success, string message, List<T>? entity)> GetAllAsync()
         {
-
             try
             {
                 // avoid hitting the database if the entity is already loaded
@@ -54,13 +53,23 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Repository
             }
             catch (DbUpdateException e)
             {
-                return (false, e.InnerException?.Message ?? e.Message, null);
+                return (false, e.InnerException?.Message ?? e.Message ?? "No error message", null);
             }
         }
 
         public async Task<(bool success, string message)> InsertOneAsync(T entity)
         {
-            _dbSet.Add(entity);
+            var entry = _context.Entry(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                _dbSet.Add(entity);
+            }
+            else
+            {
+                return (false, "Entity is already in the database.");
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
