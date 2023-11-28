@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class User
+    public class User : IEntity
+
     {
-        public string Id { get; private set; }
+        [Key]
+        public string Key { get; set; }
+
 
         [Required]
         [NotMapped]
         public UserKey ObjectKey
         {
-            get => new(Id);
-            set => Id = value.Value;
+            get => new(Key);
+            set => Key = value.Value;
         }
 
-        [Required][StringLength(100)] public string Name { get; set; }
-
-        public User(String id, string name)
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; }
+        public User(String key, string name)
         {
-            Id = id;
+            Key = key;
             Name = name;
         }
 

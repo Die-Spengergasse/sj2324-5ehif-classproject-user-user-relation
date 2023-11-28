@@ -9,7 +9,7 @@ public class Preference : IEntity
     public string Key { get; set; }
     
     [NotMapped]
-    public PreferenceKey ProxyKey
+    public PreferenceKey KeyObject
     {
         get => new(Key);
         set => Key = value.Value;
@@ -20,7 +20,7 @@ public class Preference : IEntity
     
     public Preference(string name)
     {
-        ProxyKey = new PreferenceKey();
+        KeyObject = new PreferenceKey();
         Name = name;
     }
     public Preference(string name,string id)

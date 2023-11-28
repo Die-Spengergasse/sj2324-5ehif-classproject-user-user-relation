@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class RecipeShare
+    public class RecipeShare :IEntity
     {
         private List<User> _collaborators = new();
 

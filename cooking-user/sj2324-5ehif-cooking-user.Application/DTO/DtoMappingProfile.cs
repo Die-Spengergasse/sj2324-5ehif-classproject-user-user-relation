@@ -50,13 +50,13 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
                 .ForSourceMember(source => source.Preferences, opt => opt.DoNotValidate());
 
             CreateMap<Preference, PreferenceDto>()
-                .BeforeMap((src, dst) => dst.PreferenceKey = src.ProxyKey.Value);
+                .BeforeMap((src, dst) => dst.PreferenceKey = src.KeyObject.Value);
 
             CreateMap<Cookbook, CookbookDto>()
                 .ForMember(dest => dest.CookbookKey, opt => opt.MapFrom(src => src.KeyObject.Value));
 
             CreateMap<Recipe, RecipeDto>()
-                .ForMember(dest => dest.RecipeKey, opt => opt.MapFrom(src => src.ProxyId.Value));
+                .ForMember(dest => dest.RecipeKey, opt => opt.MapFrom(src => src.KeyObject.Value));
 
             CreateMap<CookbookDto, Cookbook>()
                 .BeforeMap((src, dst) =>

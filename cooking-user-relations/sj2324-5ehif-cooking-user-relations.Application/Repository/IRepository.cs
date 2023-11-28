@@ -1,12 +1,11 @@
-﻿using sj2324_5ehif_cooking_user.Application.Model;
+﻿using sj2324_5ehif_cooking_user_relations.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sj2324_5ehif_cooking_user.Application.Repository
+namespace sj2324_5ehif_cooking_user_relations.Application.Repository
 {
     public interface IRepository<T> where T : class, IEntity
     {
@@ -16,6 +15,4 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
         Task<(bool success, string message)> UpdateOneAsync(T entity);
         Task<(bool success, string message)> DeleteOneAsync(T entity);
     }
-
-
 }

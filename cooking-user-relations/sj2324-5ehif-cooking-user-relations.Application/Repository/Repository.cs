@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using sj2324_5ehif_cooking_user.Application.Model;
+using sj2324_5ehif_cooking_user_relations.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sj2324_5ehif_cooking_user.Application.Repository
+namespace sj2324_5ehif_cooking_user_relations.Application.Repository
 {
     public class Repository<T> : IRepository<T> where T : class, IEntity
-    
+
     {
         protected readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -31,7 +30,7 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
 
                 if (entity == null)
                 {
-                    return (false, $"No entity with ID {id} found.", null);
+                    return (false, $"{typeof(T)} id {id} not found.", null);
                 }
                 else
                 {
@@ -46,16 +45,15 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
 
         public virtual async Task<(bool success, string message, List<T>? entity)> GetAllAsync()
         {
-
             try
             {
                 // avoid hitting the database if the entity is already loaded
                 var entity = await _dbSet.ToListAsync();
-                return  (true, string.Empty, entity);
+                return (true, string.Empty, entity);
             }
             catch (DbUpdateException e)
             {
-                return (false, e.InnerException?.Message ?? e.Message, null);
+                return (false, e.InnerException?.Message ?? e.Message ?? "No error message", null);
             }
         }
 
@@ -111,7 +109,5 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
             }
         }
 
-
     }
-
 }
