@@ -15,7 +15,6 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
         Task<(bool success, string message)> InsertOneAsync(T entity);
         Task<(bool success, string message)> UpdateOneAsync(T entity);
         Task<(bool success, string message)> DeleteOneAsync(T entity);
-        Task<(bool success, string message)> DeleteAllAsync();
     }
 
 

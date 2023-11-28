@@ -148,32 +148,5 @@ namespace sj2324_5ehif_cooking_user_relations.Test
             }
         }
 
-        [Fact]
-        public async Task DeleteAllUsersTest()
-        {
-            // Prep
-            SetupContext();
-            var user1 = AddUser().Result;
-            var user2 = AddUser().Result;
-            var check_user1 = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user1.Key);
-            var check_user2 = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user2.Key);
-
-            if (check_user1 is not null && check_user2 is not null)
-            {
-                // Act
-                var result = await _userRepository.DeleteAllAsync();
-
-                // Assert
-                Assert.IsTrue(result.success, "Deletion failed");
-                Assert.AreEqual(0, _context.Set<User>().Count(), "Users were not deleted");
-            }
-            else
-            {
-                Assert.Fail("User not found after insertion");
-            }
-
-
-
-        }
     }
 }

@@ -111,21 +111,6 @@ namespace sj2324_5ehif_cooking_user.Application.Repository
             }
         }
 
-        public async Task<(bool success, string message)> DeleteAllAsync()
-        {
-
-            _context.Set<T>().RemoveRange(await _context.Set<T>().ToListAsync());
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return (true, string.Empty);
-            }
-            catch (Exception e)
-            {
-                return (false, e.InnerException?.Message ?? e.Message);
-            }
-        }
 
     }
 
