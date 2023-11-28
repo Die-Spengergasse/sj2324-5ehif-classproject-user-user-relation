@@ -4,14 +4,15 @@ using sj2324_5ehif_cooking_user.Application.Repository;
 using Bogus;
 using Assert = NUnit.Framework.Assert;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace sj2324_5ehif_cooking_user.Test
 {
 
-    public class UserRepositoryTests : DatabaseTest
+    public class RepositoryTests : DatabaseTest
     {
         private readonly UserRepository _userRepository;
-        public UserRepositoryTests()
+        public RepositoryTests()
         {
 
             _userRepository = new UserRepository(_context);
@@ -43,41 +44,53 @@ namespace sj2324_5ehif_cooking_user.Test
                 );
             return faker.Generate();
         }
+        public async void SetupContext()
+        {
+            _context.Set<User>().RemoveRange(await _context.Set<User>().ToListAsync());
+            await _context.SaveChangesAsync();
+        }
+        public async Task<User> AddUser()
+        {
+            var user = GenerateUser();
+            await _context.Set<User>().AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
 
         [Fact]
         public async Task AddUserTest()
         {
             // Prep
-            await _userRepository.DeleteAllAsync();
-
+            SetupContext();
             var user1 = GenerateUser();
+
             // Act
             var result = await _userRepository.InsertOneAsync(user1);
 
             // Check
-            var check = await _userRepository.GetByIdAsync(user1.Key);
+            var check = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user1.Key);
 
             // Assert
             Assert.IsTrue(result.success);
-            Assert.IsTrue(check.success);
-            Assert.AreEqual(check.entity.Key, user1.Key);
+            Assert.IsNotNull(check);
+            Assert.AreEqual(check?.Key, user1.Key);
+
+            // Clean
+            SetupContext();
         }
         [Fact]
         public async Task GetByKeyTest()
         {
             // Prep
-            await _userRepository.DeleteAllAsync();
-
-            var user1 = GenerateUser();
-            var key = user1.Key;
-
-            await _userRepository.InsertOneAsync(user1);
+            SetupContext();
+            var user = AddUser().Result;
 
             // Act
-            var result = await _userRepository.GetByIdAsync(key);
+            var result = await _userRepository.GetByIdAsync(user.Key);
 
             // Assert
-            Assert.AreEqual(key, result.entity.Key);
+            Assert.AreEqual(user.Key, result.entity.Key);
             Assert.IsTrue(result.success);
             Assert.IsNotNull(result.entity);
 
@@ -87,13 +100,9 @@ namespace sj2324_5ehif_cooking_user.Test
         public async Task GetAllUsersTest()
         {
             // Prep
-            await _userRepository.DeleteAllAsync();
-
-            var user1 = GenerateUser();
-            var user2 = GenerateUser();
-
-            await _userRepository.InsertOneAsync(user1);
-            await _userRepository.InsertOneAsync(user2);
+            SetupContext();
+            var user1 = AddUser();
+            var user2 = AddUser();
 
             // Act
             var result = await _userRepository.GetAllAsync();
@@ -103,55 +112,85 @@ namespace sj2324_5ehif_cooking_user.Test
             Assert.IsNotNull(result.entity);
             Assert.AreEqual(2, result.entity.Count);
 
-            await _userRepository.DeleteAllAsync();
-
-
+            // Clean
+            SetupContext();
         }
 
         [Fact]
         public async Task UpdateUserTest()
         {
             // Prep
-            await _userRepository.DeleteAllAsync();
-            var user1 = GenerateUser();
-            await _userRepository.InsertOneAsync(user1);
+            SetupContext();
+            var user = AddUser().Result;
 
-            user1.Email = "LuisStinkt@gmail.com";
+            user.Email = "LuisStinkt@gmail.com";
             // Act
-            var result = await _userRepository.UpdateOneAsync(user1);
+            var result = await _userRepository.UpdateOneAsync(user);
 
             // Check
-            var updated_user = await _userRepository.GetByIdAsync(user1.Key);
+            var updated_user = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user.Key);
 
             // Assert
             Assert.IsTrue(result.success);
-            Assert.AreEqual(user1.Email, updated_user.entity.Email);
+            Assert.AreEqual(user.Email, updated_user?.Email);
+
+            // Clean
+            SetupContext();
         }
 
         [Fact]
         public async Task DeleteUserTest()
         {
             // Prep
-            await _userRepository.DeleteAllAsync();
-            var user1 = GenerateUser();
-            var insert_res = await _userRepository.InsertOneAsync(user1);
-            Assert.IsTrue(insert_res.success, "Insertion failed");
+            SetupContext();
+            var user = AddUser().Result;
+            var check_user = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user.Key);
 
-            var check_res = await _userRepository.GetByIdAsync(user1.Key);
-            if (check_res.success)
+            // Check
+            if (check_user is not null)
             {
                 // Act
-                var result = await _userRepository.DeleteOneAsync(user1);
-                var check = await _userRepository.GetByIdAsync(user1.Key);
+                var result = await _userRepository.DeleteOneAsync(user);
+
+                var check = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user.Key);
 
                 // Assert
                 Assert.IsTrue(result.success, "Deletion failed");
-                Assert.IsFalse(check.success, "User still exists after deletion");
+                Assert.IsNull(check, "User still exists after deletion");
+                Assert.AreEqual(0, _context.Set<User>().Count(), "User was not deleted");
             }
             else
             {
                 Assert.Fail("User not found after insertion");
             }
+        }
+
+        [Fact]
+        public async Task DeleteAllUsersTest()
+        {
+            // Prep
+            SetupContext();
+            var user1 = AddUser().Result;
+            var user2 = AddUser().Result;
+            var check_user1 = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user1.Key);
+            var check_user2 = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user2.Key);
+
+            if (check_user1 is not null && check_user2 is not null)
+            {
+                // Act
+                var result = await _userRepository.DeleteAllAsync();
+
+                // Assert
+                Assert.IsTrue(result.success, "Deletion failed");
+                Assert.AreEqual(0, _context.Set<User>().Count(), "Users were not deleted");
+            }
+            else
+            {
+                Assert.Fail("User not found after insertion");
+            }
+
+
+
         }
 
     }

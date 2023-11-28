@@ -15,7 +15,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
 
 
         [NotMapped]
-        public RecipeKey ProxyId
+        public RecipeKey KeyObject
         {
             get => new(Key);
             set => Key = value.Value;

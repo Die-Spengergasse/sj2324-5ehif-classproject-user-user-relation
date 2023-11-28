@@ -10,7 +10,7 @@ public class Recipe : IEntity
 
 
     [NotMapped]
-    public RecipeKey ProxyId
+    public RecipeKey KeyObject
     {
         get => new(Key);
         set => Key = value.Value;
@@ -22,7 +22,7 @@ public class Recipe : IEntity
 
     public Recipe(string name)
     {
-        ProxyId = new RecipeKey();
+        KeyObject = new RecipeKey();
         Name = name;
     }
 
