@@ -9,23 +9,25 @@ using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class Recipe
+    public class Recipe : IEntity
     {
-        public string Id { get; set;}
-    
+        [Key] public string Key { get; set;}
+
+
         [NotMapped]
         public RecipeKey ProxyId
         {
-            get => new(Id);
-            set => Id = value.Value;
+            get => new(Key);
+            set => Key = value.Value;
         }
         
         [Required(AllowEmptyStrings = false)]
         [StringLength(50)] 
         public string Name { get; set; }
-        public Recipe(string name)
+
+        public Recipe(string key, string name)
         {
-            ProxyId = new RecipeKey();
+            Key = key;
             Name = name;
         }
     

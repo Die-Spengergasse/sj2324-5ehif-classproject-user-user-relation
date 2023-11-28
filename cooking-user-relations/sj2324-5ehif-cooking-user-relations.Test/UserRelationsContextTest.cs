@@ -18,7 +18,7 @@ public class UserRelationsContextTests
     [Fact]
     public void RecipeShareTest()
     {
-        var testRecipe = new Recipe("Test Recipe");
+        var testRecipe = new Recipe("R1234", "Test Recipe");
         _context.Recipes.Add(testRecipe);
 
         var testUser1 = new User("USR123", "John Doe");
@@ -36,7 +36,7 @@ public class UserRelationsContextTests
             .FirstOrDefault(rs => rs.Key == recipeShare.Key);
 
         Assert.NotNull(retrievedRecipeShare);
-        Assert.Equal(testRecipe.Id, retrievedRecipeShare.Recipe.Id); 
+        Assert.Equal(testRecipe.Key, retrievedRecipeShare.Recipe.Key); 
         Assert.Equal(collaborators.Count, retrievedRecipeShare.Collaborators.Count);
     }
     [Fact]
@@ -44,7 +44,7 @@ public class UserRelationsContextTests
     {
         var testUser1 = new User("USR123", "John Doe");
         var testUser2 = new User("USR456", "Jane Doe");
-        var testRecipe = new Recipe("Test Recipe");
+        var testRecipe = new Recipe("R456","Test Recipe");
 
         var feedback = new Feedback(testUser1, testUser2, 5, testRecipe, "Great recipe!");
 
@@ -73,30 +73,32 @@ public class UserRelationsContextTests
         var retrievedFollow = _context.Follows.FirstOrDefault(f => f.Id == follow.Id);
 
         Assert.NotNull(retrievedFollow);
-        Assert.Equal(followed.Id, retrievedFollow.User.Id);
-        Assert.Equal(follower.Id, retrievedFollow.Follower.Id);
+        Assert.Equal(followed.Key, retrievedFollow.User.Key);
+        Assert.Equal(follower.Key, retrievedFollow.Follower.Key);
     }
 
     [Fact]
     public void AddUpdateRecipeTest()
     {
-        var recipe = new Recipe("Original Recipe Name");
+        var recipe = new Recipe("R7899", "Original Recipe Name");
         _context.Recipes.Add(recipe);
         _context.SaveChanges();
 
-        var recipeToUpdate = _context.Recipes.FirstOrDefault(r => r.Id == recipe.Id);
+        var recipeToUpdate = _context.Recipes.FirstOrDefault(r => r.Key == recipe.Key);
         recipeToUpdate.Name = "Updated Recipe Name";
         _context.SaveChanges();
 
-        var updatedRecipe = _context.Recipes.FirstOrDefault(r => r.Id == recipe.Id);
+        var updatedRecipe = _context.Recipes.FirstOrDefault(r => r.Key == recipe.Key);
         Assert.NotNull(updatedRecipe);
+
         Assert.Equal("Updated Recipe Name", updatedRecipe.Name);
     }
+
 
     [Fact]
     public void DeleteRecipeShareTest()
     {
-        var testRecipe = new Recipe("Test Recipe for Deletion");
+        var testRecipe = new Recipe("R6879", "Test Recipe for Deletion");
         var testUser = new User("USR7889", "Charlie");
         var collaborators = new List<User> { testUser };
 
@@ -119,7 +121,7 @@ public class UserRelationsContextTests
         _context.Users.Add(newUser);
         _context.SaveChanges();
 
-        var retrievedUser = _context.Users.FirstOrDefault(u => u.Id == newUser.Id);
+        var retrievedUser = _context.Users.FirstOrDefault(u => u.Key == newUser.Key);
         Assert.NotNull(retrievedUser);
         Assert.Equal("Alma", retrievedUser.Name);
     }
@@ -130,11 +132,11 @@ public class UserRelationsContextTests
         _context.Users.Add(user);
         _context.SaveChanges();
 
-        var userToUpdate = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+        var userToUpdate = _context.Users.FirstOrDefault(u => u.Key == user.Key);
         userToUpdate.Name = "Alma";
         _context.SaveChanges();
 
-        var updatedUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+        var updatedUser = _context.Users.FirstOrDefault(u => u.Key == user.Key);
         Assert.NotNull(updatedUser);
         Assert.Equal("Alma", updatedUser.Name);
     }

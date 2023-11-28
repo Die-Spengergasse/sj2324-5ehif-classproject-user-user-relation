@@ -1,13 +1,10 @@
-﻿
-using sj2324_5ehif_cooking_user.Application.Model;
-using sj2324_5ehif_cooking_user.Application.Repository;
+﻿using Assert = NUnit.Framework.Assert;
 using Bogus;
-using Assert = NUnit.Framework.Assert;
-using System.Text;
+using sj2324_5ehif_cooking_user_relations.Application.Model;
+using sj2324_5ehif_cooking_user_relations.Application.Repository;
 
-namespace sj2324_5ehif_cooking_user.Test
+namespace sj2324_5ehif_cooking_user_relations.Test
 {
-
     public class UserRepositoryTests : DatabaseTest
     {
         private readonly UserRepository _userRepository;
@@ -17,27 +14,12 @@ namespace sj2324_5ehif_cooking_user.Test
             _userRepository = new UserRepository(_context);
 
         }
-
-        public static string CreatePassword(int length)
-        {
-            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            StringBuilder res = new StringBuilder();
-            Random rnd = new Random();
-            while (0 < length--)
-            {
-                res.Append(valid[rnd.Next(valid.Length)]);
-            }
-            return res.ToString();
-        }
         public static User GenerateUser()
         {
             var faker = new Faker<User>()
                 .CustomInstantiator(f => new User(
-                        username: f.Person.UserName,
-                        firstname: f.Person.FirstName,
-                        lastname: f.Person.LastName,
-                        email: f.Person.Email,
-                        password: CreatePassword(8)
+                        name: f.Person.FullName,
+                        key: Guid.NewGuid().ToString("N")
 
                     )
                 );
@@ -116,7 +98,7 @@ namespace sj2324_5ehif_cooking_user.Test
             var user1 = GenerateUser();
             await _userRepository.InsertOneAsync(user1);
 
-            user1.Email = "LuisStinkt@gmail.com";
+            user1.Name = "Xenox Cardio";
             // Act
             var result = await _userRepository.UpdateOneAsync(user1);
 
@@ -125,7 +107,7 @@ namespace sj2324_5ehif_cooking_user.Test
 
             // Assert
             Assert.IsTrue(result.success);
-            Assert.AreEqual(user1.Email, updated_user.entity.Email);
+            Assert.AreEqual(user1.Name, updated_user.entity.Name);
         }
 
         [Fact]
