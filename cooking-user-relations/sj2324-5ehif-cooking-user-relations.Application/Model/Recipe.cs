@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿
+using sj2324_5ehif_cooking_user_relations.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,11 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         [Required(AllowEmptyStrings = false)]
         [StringLength(50)] 
         public string Name { get; set; }
+        public Recipe(string name)
+        {
+            KeyObject = new RecipeKey();
+            Name = name;
+        }
 
         public Recipe(string key, string name)
         {
@@ -34,3 +40,5 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         protected Recipe() { } 
     }
 }
+
+
