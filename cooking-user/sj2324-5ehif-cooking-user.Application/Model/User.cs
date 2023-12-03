@@ -5,23 +5,16 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class User : IEntity
 {
-    private List<Preference> _preferences = new();
-    [Key] public long Id { get; private set; }
+    [Key] 
+    public long Id { get; private set; }
+    public List<Preference> _preferences = new();
     public string Key { get; set; }
-
-    [Required]
-    [NotMapped]
-    public UserKey ObjectKey
-    {
-        get => new(Key);
-        set => Key = value.Value;
-    }
-
-    [Required] [StringLength(50)] public string Username { get; set; }
-    [Required] [StringLength(100)] public string Lastname { get; set; }
-    [Required] [StringLength(100)] public string Firstname { get; set; }
-    [Required] [EmailAddress] public string Email { get; set; }
-    [Required] public string Password { get; set; }
+    
+    [StringLength(50)] public string Username { get; set; }
+    [StringLength(100)] public string Lastname { get; set; }
+    [StringLength(100)] public string Firstname { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 
     public virtual IReadOnlyCollection<Preference> Preferences => _preferences;
 
@@ -30,6 +23,7 @@ public class User : IEntity
     {
     }
 #pragma warning restore CS8618
+    
     public User(string username, string lastname, string firstname, string email, string password)
     {
         ObjectKey = new UserKey();
@@ -38,6 +32,13 @@ public class User : IEntity
         Firstname = firstname;
         Email = email;
         Password = password;
+    }
+    
+    [NotMapped]
+    public UserKey ObjectKey
+    {
+        get => new(Key);
+        set => Key = value.Value;
     }
 
     public override bool Equals(object? obj)

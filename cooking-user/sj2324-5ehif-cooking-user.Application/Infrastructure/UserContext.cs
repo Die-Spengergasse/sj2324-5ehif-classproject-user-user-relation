@@ -16,5 +16,13 @@ public class UserContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Cookbook>()
+            .HasKey(r => r.Id);
+        modelBuilder.Entity<Preference>()
+            .HasKey(r => r.Id);
+        modelBuilder.Entity<Recipe>()
+            .HasKey(r => r.Id);
+        modelBuilder.Entity<User>()
+            .HasKey(r => r.Id);
     }
 }

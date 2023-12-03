@@ -2,7 +2,7 @@
 
 public class RecipeDto
 {
-    public string RecipeKey { get; set; }
+    public string Key { get; set; }
     public string Name { get; set; }
     public string Authorkey { get; set; }
 }

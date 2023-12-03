@@ -1,38 +1,45 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using sj2324_5ehif_cooking_user.Application.Infrastructure;
 using sj2324_5ehif_cooking_user.Application.Model;
 
 namespace sj2324_5ehif_cooking_user.Application.Repository;
 
-public class Repository<T> : IRepository<T> where T : class, IEntity
+public interface IRepository<T> where T : class
 {
-    protected readonly DbContext _context;
+    Task<(bool success, string message, T entity)> GetByIdAsync(string key);
+    Task<(bool success, string message, List<T> entity)> GetAllAsync();
+    Task<(bool success, string message)> InsertOneAsync(T entity);
+    Task<(bool success, string message)> UpdateOneAsync(T entity);
+    Task<(bool success, string message)> DeleteOneAsync(string key);
+}
+
+public class Repository<T> : IRepository<T> where T : class
+{
+    private readonly UserContext _context;
     private readonly DbSet<T> _dbSet;
 
-    public Repository(DbContext context)
+    public Repository(UserContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _dbSet = _context.Set<T>();
     }
 
-    public async Task<(bool success, string message, T? entity)> GetByIdAsync(object id)
+    public async Task<(bool success, string message, T? entity)> GetByIdAsync(string key)
     {
-        if (id == null) throw new ArgumentNullException(nameof(id));
+        if (key == null) throw new ArgumentNullException(nameof(key));
 
         try
         {
-            var entity = await _dbSet.SingleOrDefaultAsync(e => e.Key == id);
+            var entity = await _dbSet.SingleOrDefaultAsync(e => EF.Property<string>(e, "Key") == key);
 
-            if (entity == null)
-                return (false, $"No entity with ID {id} found.", null);
-            else
-                return (true, string.Empty, entity);
+            return entity != null ? (true, "Entity found", entity) : (false, "Entity not found", null);
         }
         catch (Exception e)
         {
             return (false, e.InnerException?.Message ?? e.Message, null);
         }
     }
-
+    
     public virtual async Task<(bool success, string message, List<T>? entity)> GetAllAsync()
     {
         try
@@ -81,9 +88,15 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         }
     }
 
-    public async Task<(bool success, string message)> DeleteOneAsync(T entity)
+    public async Task<(bool success, string message)> DeleteOneAsync(string key)
     {
-        _dbSet.Remove(entity);
+        var result = await GetByIdAsync(key);
+        if (!result.success)
+        {
+            return (false, "Entity not found");
+        }
+
+        _dbSet.Remove(result.entity);
         try
         {
             await _context.SaveChangesAsync();

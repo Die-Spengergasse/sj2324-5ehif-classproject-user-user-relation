@@ -2,6 +2,6 @@
 
 public class PreferenceDto
 {
-    public string PreferenceKey { get; set; }
+    public string Key { get; set; }
     public string Name { get; set; }
 }

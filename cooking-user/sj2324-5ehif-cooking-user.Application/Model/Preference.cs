@@ -5,29 +5,24 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class Preference : IEntity
 {
-    [Key]
+    [Key] public long Id { get; private set; }
     public string Key { get; set; }
-    
+    [Required(AllowEmptyStrings = false)] public string Name { get; set; }
+
+    public Preference(string name)
+    {
+        KeyObject = new PreferenceKey();
+        Name = name;
+    }
+
+    protected Preference()
+    {
+    }
+
     [NotMapped]
     public PreferenceKey KeyObject
     {
         get => new(Key);
         set => Key = value.Value;
     }
-    
-    [Required(AllowEmptyStrings = false)]
-    public string Name { get; }
-    
-    public Preference(string name)
-    {
-        KeyObject = new PreferenceKey();
-        Name = name;
-    }
-    public Preference(string name,string id)
-    {
-        Key = id;
-        Name = name;
-    }
-    
-    protected Preference() { } 
 }
