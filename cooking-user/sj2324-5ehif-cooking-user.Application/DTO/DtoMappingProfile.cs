@@ -57,35 +57,6 @@ namespace sj2324_5ehif_cooking_user.Application.DTO
 
             CreateMap<Recipe, RecipeDto>()
                 .ForMember(dest => dest.RecipeKey, opt => opt.MapFrom(src => src.KeyObject.Value));
-
-            CreateMap<CookbookDto, Cookbook>()
-                .BeforeMap((src, dst) =>
-                {
-                    dst.Key = src.CookbookKey;
-                    foreach (var collaborator in src.Collaborators)
-                    {
-                        dst.AddUser(new User(username:collaborator.Username,lastname:collaborator.Firstname,firstname:collaborator.Lastname,email:collaborator.Email, password:collaborator.Password){Key = collaborator.UserKey});
-                    }
-
-                    foreach (var recipe in src.Recipes)
-                    {
-                        dst.AddRecipe(new Recipe(name:recipe.Name){ Key = recipe.RecipeKey});
-                    }
-                    if (string.IsNullOrEmpty(src.Name))
-                    {
-                        throw new ApplicationException("Invalid cookbook name.");
-                    }
-                });
-
-
-            CreateMap<RecipeDto, Recipe>()
-                .ConstructUsing(dto => new Recipe(dto.Name){Key = dto.RecipeKey}).BeforeMap((src, dst) =>
-                {
-                    if (string.IsNullOrEmpty(src.Name))
-                    {
-                        throw new ApplicationException("Invalid recipe name.");
-                    }
-                });
         }
     }
 }

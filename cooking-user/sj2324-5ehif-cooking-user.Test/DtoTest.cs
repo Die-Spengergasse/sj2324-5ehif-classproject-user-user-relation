@@ -104,7 +104,7 @@ public class DtoTest
     {
         var user = new User("ownerUsername", "OwnerLastname", "OwnerFirstname", "owner@example.com", "qwerty12345");
         var cookbook = new Cookbook(user, "My Cookbook", false);
-        var recipe = new Recipe("My Recipe");
+        var recipe = new Recipe("My Recipe","USR1234567890AB");
         cookbook.AddRecipe(recipe);
         cookbook.AddUser(user);
 
@@ -121,7 +121,7 @@ public class DtoTest
     [Fact]
     public void AutoMapper_RecipeToRecipeDto_MapsCorrectly()
     {
-        var recipe = new Recipe("My Recipe");
+        var recipe = new Recipe("My Recipe", "USR1234567890AB");
 
         var recipeDto = _mapper.Map<RecipeDto>(recipe);
 
