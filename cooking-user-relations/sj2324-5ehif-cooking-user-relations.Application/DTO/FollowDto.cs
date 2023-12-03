@@ -10,6 +10,6 @@ namespace sj2324_5ehif_cooking_user_relations.Application.DTO
     {
         public string FollowKey { get; set; }
         public UserDto Follower { get; set; }
-        public UserDto Followed { get; set; }
+        public UserDto User { get; set; }
     }
 }
