@@ -21,6 +21,16 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Infrastructure
             }
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
+                modelBuilder.Entity<Feedback>()
+                    .HasKey(r => r.Id);
+                modelBuilder.Entity<Follow>()
+                    .HasKey(r => r.Id);
+                modelBuilder.Entity<RecipeShare>()
+                    .HasKey(r => r.Id);
+                modelBuilder.Entity<Recipe>()
+                    .HasKey(r => r.Key);
+                modelBuilder.Entity<User>()
+                    .HasKey(r => r.Key);
             }
         }
     

@@ -9,10 +9,10 @@ namespace sj2324_5ehif_cooking_user_relations.Test
 {
     public class UserRepositoryTests : DatabaseTest
     {
-        private readonly UserRepository _userRepository;
+        private readonly Repository<User> _userRepository;
         public UserRepositoryTests()
         {
-            _userRepository = new UserRepository(_context);
+            _userRepository = new Repository<User>(_context);
 
         }
         public static User GenerateUser()
@@ -133,7 +133,7 @@ namespace sj2324_5ehif_cooking_user_relations.Test
             if (check_user is not null)
             {
                 // Act
-                var result = await _userRepository.DeleteOneAsync(user);
+                var result = await _userRepository.DeleteOneAsync(user.Key);
 
                 var check = await _context.Set<User>().SingleOrDefaultAsync(e => e.Key == user.Key);
 
