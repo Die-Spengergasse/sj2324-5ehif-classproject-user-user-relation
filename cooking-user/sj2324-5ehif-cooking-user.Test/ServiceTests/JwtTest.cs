@@ -29,8 +29,8 @@ public class JwtTest
     [Fact]
     public void GenerateJwtToken_ReturnsValidToken()
     {
-        var username = "testuser";
-        var jwtToken = _jwtUtils.GenerateJwtToken(username);
+        var userKey = "testuser";
+        var jwtToken = _jwtUtils.GenerateJwtToken(userKey);
         Assert.NotNull(jwtToken);
         Assert.NotEmpty(jwtToken);
         Assert.True(ValidateToken(jwtToken));
@@ -39,12 +39,12 @@ public class JwtTest
     [Fact]
     public void GenerateJwtToken_ContainsCorrectClaims()
     {
-        var username = "testuser";
-        var jwtToken = _jwtUtils.GenerateJwtToken(username);
+        var userKey = "testuser";
+        var jwtToken = _jwtUtils.GenerateJwtToken(userKey);
         var token = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
         Assert.NotNull(token);
         Assert.Equal(_configuration["Jwt:Issuer"], token.Issuer);
-        var claim = Assert.Single(token.Claims.ToList(), c => c.Value == username);
+        var claim = Assert.Single(token.Claims.ToList(), c => c.Value == userKey);
         Assert.NotNull(claim);
     }
 

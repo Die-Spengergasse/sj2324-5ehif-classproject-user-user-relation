@@ -34,7 +34,6 @@ public class Startup
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooking User", Version = "v1" });
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
-        services.AddScoped<IPasswordUtils, PasswordUtils>();
         services.AddAutoMapper(typeof(DtoMappingProfile));
         
         services.AddSingleton(new JwtUtils(Configuration));

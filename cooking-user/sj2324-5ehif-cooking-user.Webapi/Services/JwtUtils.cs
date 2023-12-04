@@ -19,7 +19,7 @@ public class JwtUtils : IJwtUtils
         _configuration = configuration;
     }
 
-    public string GenerateJwtToken(string username)
+    public string GenerateJwtToken(string userKey)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
@@ -28,7 +28,7 @@ public class JwtUtils : IJwtUtils
         {
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"],
-            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
+            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userKey) }),
             Expires = DateTime.UtcNow.AddHours(12), // token valid for 12 hours
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

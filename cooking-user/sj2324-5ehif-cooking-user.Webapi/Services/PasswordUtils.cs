@@ -3,7 +3,7 @@ using System.Text;
 
 namespace sj2324_5ehif_cooking_user.Webapi.Services;
 
-public class PasswordUtils : IPasswordUtils
+public class PasswordUtils
 {
     public string HashPassword(string password)
     {
@@ -13,9 +13,4 @@ public class PasswordUtils : IPasswordUtils
             return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
     }
-}
-
-public interface IPasswordUtils
-{
-    string HashPassword(string password);
 }
