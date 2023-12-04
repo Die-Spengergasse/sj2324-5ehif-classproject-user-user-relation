@@ -22,10 +22,10 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<PreferenceRepository>(); 
-        services.AddScoped<IRepository<Cookbook>, CookbookRepository>();
-        services.AddScoped<IRepository<Recipe>, RecipeRepository>();
-        services.AddScoped<IRepository<User>, UserRepository>();
+        services.AddScoped<IRepository<Cookbook>, Repository<Cookbook>>();
+        services.AddScoped<IRepository<Preference>, Repository<Preference>>();
+        services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
+        services.AddScoped<IRepository<User>, Repository<User>>();
         
         services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));

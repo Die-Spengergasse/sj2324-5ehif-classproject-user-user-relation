@@ -10,15 +10,15 @@ namespace sj2324_5ehif_cooking_user.Webapi.Controllers;
 [Route("api/[controller]")]
 public class PreferenceController : ControllerBase
 {
-    private readonly PreferenceRepository _preferenceRepository;
+    private readonly IRepository<Preference> _preferenceRepository;
     private readonly IMapper _mapper;
     
 
-    public PreferenceController(PreferenceRepository preferenceRepository, IMapper mapper)
+    public PreferenceController(IRepository<Preference> preferenceRepository, IMapper mapper)
     {
         _preferenceRepository = preferenceRepository;
         _mapper = mapper;
-        
+            
     }
 
     // GET: api/Preference

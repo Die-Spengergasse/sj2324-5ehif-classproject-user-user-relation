@@ -9,11 +9,11 @@ namespace sj2324_5ehif_cooking_user.Test;
 
 public class RepositoryTests : DatabaseTest
 {
-    private readonly UserRepository _userRepository;
+    private readonly IRepository<User> _userRepository;
 
     public RepositoryTests()
     {
-        _userRepository = new UserRepository(_context);
+        _userRepository = new Repository<User>(_context);
     }
 
     public static string CreatePassword(int length)
