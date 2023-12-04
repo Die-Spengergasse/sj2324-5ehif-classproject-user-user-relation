@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
-using sj2324_5ehif_cooking_user.Application.Model;
 
 namespace sj2324_5ehif_cooking_user.Application.Repository;
 
@@ -11,6 +10,7 @@ public interface IRepository<T> where T : class
     Task<(bool success, string message)> InsertOneAsync(T entity);
     Task<(bool success, string message)> UpdateOneAsync(T entity);
     Task<(bool success, string message)> DeleteOneAsync(string key);
+    Task<(bool success, string message)> SaveChangesAsync();
 }
 
 public class Repository<T> : IRepository<T> where T : class
@@ -39,7 +39,7 @@ public class Repository<T> : IRepository<T> where T : class
             return (false, e.InnerException?.Message ?? e.Message, null);
         }
     }
-    
+
     public virtual async Task<(bool success, string message, List<T>? entity)> GetAllAsync()
     {
         try
@@ -91,12 +91,22 @@ public class Repository<T> : IRepository<T> where T : class
     public async Task<(bool success, string message)> DeleteOneAsync(string key)
     {
         var result = await GetByIdAsync(key);
-        if (!result.success)
-        {
-            return (false, "Entity not found");
-        }
+        if (!result.success) return (false, "Entity not found");
 
         _dbSet.Remove(result.entity);
+        try
+        {
+            await _context.SaveChangesAsync();
+            return (true, string.Empty);
+        }
+        catch (Exception e)
+        {
+            return (false, e.InnerException?.Message ?? e.Message);
+        }
+    }
+
+    public async Task<(bool success, string message)> SaveChangesAsync()
+    {
         try
         {
             await _context.SaveChangesAsync();

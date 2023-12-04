@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using sj2324_5ehif_cooking_user.Application.DTO;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
+using sj2324_5ehif_cooking_user.Application.Model;
+using sj2324_5ehif_cooking_user.Application.Repository;
 using sj2324_5ehif_cooking_user.Webapi.Controllers;
 using sj2324_5ehif_cooking_user.Webapi.Services;
 
@@ -94,16 +96,16 @@ public class AuthTest
     //Helper methods
     private async Task<IActionResult> RegistrationHelper(RegisterModel registerModel)
     {
-        var controller = new AuthController(_mockContext, _mockLogger,
-            _mockJwtUtils);
+        var controller = new AuthController(_mockLogger,
+            _mockJwtUtils, new Repository<User>(_mockContext));
 
         return await controller.Register(registerModel);
     }
 
     private async Task<IActionResult> LoginHelper(LoginModel loginModel)
     {
-        var controller = new AuthController(_mockContext, _mockLogger,
-            _mockJwtUtils);
+        var controller = new AuthController(_mockLogger,
+            _mockJwtUtils, new Repository<User>(_mockContext));
 
         return await controller.Login(loginModel);
     }
