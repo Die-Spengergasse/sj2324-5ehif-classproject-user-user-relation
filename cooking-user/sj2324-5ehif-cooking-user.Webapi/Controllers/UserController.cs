@@ -16,18 +16,16 @@ public class UserController : ControllerBase
     private readonly UserContext _context;
     private readonly ILogger<UserController> _logger;
     private readonly IMapper _mapper;
-    private readonly IPasswordUtils _passwordUtils;
 
-    public UserController(UserContext context, ILogger<UserController> logger, IPasswordUtils passwordUtils,
+    public UserController(UserContext context, ILogger<UserController> logger,
         IMapper mapper)
     {
         _context = context;
         _logger = logger;
-        _passwordUtils = passwordUtils;
         _mapper = mapper;
     }
 
-    [Authorize]
+    [Authorize]//delete wiht userkey
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser(DeleteUserModel deleteDto)
     {
@@ -44,7 +42,7 @@ public class UserController : ControllerBase
                 return NotFound("User not found");
             }
 
-            var hashedPassword = _passwordUtils.HashPassword(deleteDto.Password);
+            var hashedPassword = new PasswordUtils().HashPassword(deleteDto.Password);
             if (user.Password != hashedPassword)
             {
                 _logger.LogWarning("Invalid credentials for user deletion: {Username}", deleteDto.Username);
@@ -108,7 +106,7 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpPut("changePassword")]
-    public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword)
+    public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword)//frombody
     {
         try
         {
@@ -122,7 +120,7 @@ public class UserController : ControllerBase
                 return NotFound("User not found");
             }
 
-            var hashedCurrentPassword = _passwordUtils.HashPassword(currentPassword);
+            var hashedCurrentPassword = new PasswordUtils().HashPassword(currentPassword);
 
             if (user.Password != hashedCurrentPassword)
             {
@@ -130,7 +128,7 @@ public class UserController : ControllerBase
                 return Unauthorized("Invalid current password");
             }
 
-            var hashedNewPassword = _passwordUtils.HashPassword(newPassword);
+            var hashedNewPassword = new PasswordUtils().HashPassword(newPassword);
             user.Password = hashedNewPassword;
             await _context.SaveChangesAsync();
 

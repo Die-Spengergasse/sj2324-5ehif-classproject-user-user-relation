@@ -4,7 +4,7 @@ namespace sj2324_5ehif_cooking_user.Test.ServiceTests;
 
 public class PasswordTest
 {
-    private readonly IPasswordUtils _passwordUtils = new PasswordUtils();
+    private readonly PasswordUtils _passwordUtils = new();
 
     [Fact]
     public void HashPassword_ReturnsValidHash()

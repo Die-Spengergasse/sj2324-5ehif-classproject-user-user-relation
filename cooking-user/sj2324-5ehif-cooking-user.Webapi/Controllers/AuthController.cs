@@ -15,15 +15,12 @@ public class AuthController : ControllerBase
     private readonly UserContext _context;
     private readonly JwtUtils _jwtUtils;
     private readonly ILogger<AuthController> _logger;
-    private readonly IPasswordUtils _passwordUtils;
-
-    public AuthController(UserContext context, ILogger<AuthController> logger, JwtUtils jwtUtils,
-        IPasswordUtils passwordUtils)
+    
+    public AuthController(UserContext context, ILogger<AuthController> logger, JwtUtils jwtUtils)
     {
         _context = context;
         _logger = logger;
         _jwtUtils = jwtUtils;
-        _passwordUtils = passwordUtils;
     }
 
     [AllowAnonymous]
@@ -45,7 +42,7 @@ public class AuthController : ControllerBase
                 return Conflict("Username or Email already exists");
             }
 
-            var hashedPassword = _passwordUtils.HashPassword(userDto.Password);
+            var hashedPassword = new PasswordUtils().HashPassword(userDto.Password);
             var newUser = new User(userDto.Username, userDto.Lastname, userDto.Firstname, userDto.Email,
                 hashedPassword);
 
@@ -77,7 +74,7 @@ public class AuthController : ControllerBase
                 return NotFound("User not found");
             }
 
-            var hashedPassword = _passwordUtils.HashPassword(loginDto.Password);
+            var hashedPassword = new PasswordUtils().HashPassword(loginDto.Password);
             if (user.Password != hashedPassword)
             {
                 _logger.LogWarning("Invalid credentials for user: {Username}", loginDto.Username);

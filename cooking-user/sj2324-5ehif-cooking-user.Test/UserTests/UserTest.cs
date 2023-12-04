@@ -19,7 +19,6 @@ public class UserTest
     private readonly JwtUtils _mockJwtUtils;
     private readonly ILogger<UserController> _mockLogger;
     private readonly IMapper _mockMapper;
-    private readonly IPasswordUtils _mockPasswordUtils;
 
     public UserTest()
     {
@@ -48,7 +47,6 @@ public class UserTest
         _mockLogger = new Logger<UserController>(new LoggerFactory());
         _mockAuthLogger = new Logger<AuthController>(new LoggerFactory());
         _mockJwtUtils = new JwtUtils(_mockConfiguration);
-        _mockPasswordUtils = new PasswordUtils();
         var faker = new Faker();
         var registerModel = new RegisterModel
         {
@@ -64,7 +62,7 @@ public class UserTest
     [Fact]
     public async Task DeleteUser_InvalidCredentials_ReturnsUnauthorized()
     {
-        var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
+        var controller = new UserController(_mockContext, _mockLogger, _mockMapper);
 
         var userToDelete = _mockContext.Users.First();
 
@@ -84,7 +82,7 @@ public class UserTest
     [Fact]
     public async Task DeleteUser_ReturnsOk()
     {
-        var controller = new UserController(_mockContext, _mockLogger, _mockPasswordUtils, _mockMapper);
+        var controller = new UserController(_mockContext, _mockLogger, _mockMapper);
 
         var userToDelete = _mockContext.Users.First();
 
@@ -105,7 +103,7 @@ public class UserTest
     private async void RegistrationHelper(RegisterModel registerModel)
     {
         var controller = new AuthController(_mockContext, _mockAuthLogger,
-            _mockJwtUtils, _mockPasswordUtils);
+            _mockJwtUtils);
 
         await controller.Register(registerModel);
     }
