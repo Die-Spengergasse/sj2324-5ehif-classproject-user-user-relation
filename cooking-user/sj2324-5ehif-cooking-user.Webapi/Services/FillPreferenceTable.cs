@@ -24,18 +24,29 @@ public class FillPreferenceTable
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            HasHeaderRecord = false,
+            HasHeaderRecord = false
         };
 
         using var reader = new StreamReader("./Services/preference.csv");
         using var csv = new CsvReader(reader, config);
-        var records = csv.GetRecords<PreferenceRecord>();
-        foreach (var record in records)
+        var csvRecords = csv.GetRecords<PreferenceRecord>().ToList();
+
+        var dbRecords = _context.Preferences.ToList();
+
+        // Delete preferences from the database that do not exist in the CSV file
+        foreach (var dbRecord in dbRecords.Where(dbRecord => csvRecords.All(r => r.Name != dbRecord.Name)))
         {
-            if (_context.Preferences.Any(p => p.Name == record.Name)) continue;
-            var preference = new Preference(record.Name);
-            _context.Preferences.Add(preference);
+            _context.Preferences.Remove(dbRecord);
+
+            // Remove the preference from all users
+            foreach (var user in _context.Users) user.RemovePreference(dbRecord);
         }
+
+        // Add preferences from the CSV file that do not exist in the database
+        foreach (var preference in from csvRecord in csvRecords
+                 where dbRecords.All(r => r.Name != csvRecord.Name)
+                 select new Preference(csvRecord.Name)) _context.Preferences.Add(preference);
+
         _context.SaveChanges();
     }
 }
