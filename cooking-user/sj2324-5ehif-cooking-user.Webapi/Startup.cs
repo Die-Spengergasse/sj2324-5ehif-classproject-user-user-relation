@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using sj2324_5ehif_cooking_user.Application.DTO;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
+using sj2324_5ehif_cooking_user.Application.Model;
+using sj2324_5ehif_cooking_user.Application.Repository;
 using sj2324_5ehif_cooking_user.Webapi.Services;
 
 namespace sj2324_5ehif_cooking_user.Webapi;
@@ -19,6 +22,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddScoped<IRepository<Cookbook>, Repository<Cookbook>>();
+        services.AddScoped<IRepository<Preference>, Repository<Preference>>();
+        services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
+        services.AddScoped<IRepository<User>, Repository<User>>();
+        
         services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));
         services.AddSwaggerGen(c =>
@@ -27,8 +35,8 @@ public class Startup
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddScoped<IPasswordUtils, PasswordUtils>();
-        services.AddAutoMapper(typeof(Startup));
-
+        services.AddAutoMapper(typeof(DtoMappingProfile));
+        
         services.AddSingleton(new JwtUtils(Configuration));
 
         services.AddAuthentication(options =>
@@ -56,6 +64,7 @@ public class Startup
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
+            await services.GetRequiredService<UserContext>().Database.EnsureDeletedAsync();
             await services.GetRequiredService<UserContext>().Database.EnsureCreatedAsync();
         }
 

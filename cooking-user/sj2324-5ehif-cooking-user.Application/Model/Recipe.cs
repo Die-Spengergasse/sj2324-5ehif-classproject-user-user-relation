@@ -5,34 +5,29 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class Recipe : IEntity
 {
-    [Key] public string Key { get; set; }
+    [Key] public long Id { get; private set; }
 
+    public string Key { get; set; }
+    
+    public string Name { get; set; }
 
+    public string AuthorKey { get; set; }
+
+    public Recipe(string name, string authorKey)
+    {
+        KeyObject = new RecipeKey();
+        Name = name;
+        AuthorKey = authorKey;
+    }
+
+    protected Recipe()
+    {
+    }
 
     [NotMapped]
     public RecipeKey KeyObject
     {
         get => new(Key);
         set => Key = value.Value;
-    }
-
-    [Required(AllowEmptyStrings = false)]
-    [StringLength(50)]
-    public string Name { get; set; }
-
-    public Recipe(string name)
-    {
-        KeyObject = new RecipeKey();
-        Name = name;
-    }
-
-    public Recipe(string name, string key)
-    {
-        Key = key;
-        Name = name;
-    }
-
-    protected Recipe()
-    {
     }
 }
