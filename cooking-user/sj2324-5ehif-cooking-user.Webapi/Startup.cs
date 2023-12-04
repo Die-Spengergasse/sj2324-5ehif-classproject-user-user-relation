@@ -33,6 +33,7 @@ public class Startup
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooking User", Version = "v1" });
         });
+        services.AddScoped<FillPreferenceTable>();
         services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddAutoMapper(typeof(DtoMappingProfile));
         
@@ -63,8 +64,11 @@ public class Startup
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-            await services.GetRequiredService<UserContext>().Database.EnsureDeletedAsync();
+            //await services.GetRequiredService<UserContext>().Database.EnsureDeletedAsync();
             await services.GetRequiredService<UserContext>().Database.EnsureCreatedAsync();
+            
+            var fillPreferenceTable = services.GetRequiredService<FillPreferenceTable>();
+            fillPreferenceTable.ReadCSV();
         }
 
         if (app.Environment.IsDevelopment())
