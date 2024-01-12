@@ -28,6 +28,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             Name = name;
         }
 
+        protected User() { }
 
     }
 }
