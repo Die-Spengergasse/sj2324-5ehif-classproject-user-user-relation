@@ -46,7 +46,6 @@ public class Startup
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cooking User V1"); });
         }
 

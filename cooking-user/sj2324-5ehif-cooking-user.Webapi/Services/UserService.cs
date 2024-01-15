@@ -1,22 +1,24 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
-using sj2324_5ehif_cooking_user.Application.Infrastructure;
 
 namespace sj2324_5ehif_cooking_user.Webapi.Services;
 
-public record UserServiceDto(string key, string username);
-public interface IUserService
+public abstract record Dto();
+public record UserServiceDto(string key, string username) : Dto();
+public interface IInterCallService
 {
-    public Task createEvent(UserServiceDto data);
+    public  Task  createEvent(Dto data);
+    public  Task  deleteEvent(string data);
+    
 }
-public class UserService : IUserService
+public class InterCallService : IInterCallService
 {
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
 
 
-    public UserService(IConfiguration configuration)
+    public InterCallService(IConfiguration configuration)
     {
         _configuration = configuration;
         _httpClient = new HttpClient();
@@ -24,16 +26,27 @@ public class UserService : IUserService
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
     }
 
-    public async Task createEvent(UserServiceDto data)
+    public async Task createEvent(Dto data)
     {
         var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
         var endpoints = _configuration.GetSection("CommunicationServices:user_endpoints").Get<string[]>();
         foreach (var location in endpoints)
         {
-            var x = await _httpClient.PostAsync(location, content);
+            await _httpClient.PostAsync(location, content);
             
         }
         
+    }
+    public async Task deleteEvent(string data)
+    {
+        var endpoints = _configuration.GetSection("CommunicationServices:user_endpoints").Get<string[]>();
+        foreach (var location in endpoints)
+        {
+            Console.WriteLine($"{location}/{data}");
+            var x = await _httpClient.DeleteAsync($"{location}/{data}");
+            Console.WriteLine(await x.Content.ReadAsStringAsync());
+            
+        }
     }
 }

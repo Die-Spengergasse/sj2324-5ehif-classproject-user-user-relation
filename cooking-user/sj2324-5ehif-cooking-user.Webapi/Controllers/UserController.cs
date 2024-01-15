@@ -15,13 +15,16 @@ public class UserController : ControllerBase
     private readonly ILogger<UserController> _logger;
     private readonly IMapper _mapper;
     private readonly IRepository<User> _repository;
+    private readonly InterCallService _interCallService;
+
 
     public UserController(ILogger<UserController> logger,
-        IMapper mapper, IRepository<User> repository)
+        IMapper mapper, IRepository<User> repository, InterCallService interCallService)
     {
         _logger = logger;
         _mapper = mapper;
         _repository = repository;
+        _interCallService = interCallService;
     }
 
     [Authorize]
@@ -41,6 +44,7 @@ public class UserController : ControllerBase
         await _repository.DeleteOneAsync(userKey);
 
         _logger.LogInformation("User deletion successful for {Key}", userKey);
+        await _interCallService.deleteEvent(userKey);
         return Ok("User deleted successfully");
     }
 
