@@ -8,8 +8,8 @@ public abstract record Dto();
 public record UserServiceDto(string key, string username) : Dto();
 public interface IInterCallService
 {
-    public  Task  createEvent(Dto data);
-    public  Task  deleteEvent(string data);
+    public Task createEvent(Dto data);
+    public Task deleteEvent(string data);
     
 }
 public class InterCallService : IInterCallService

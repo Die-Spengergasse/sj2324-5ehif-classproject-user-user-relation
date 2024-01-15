@@ -64,7 +64,11 @@ public class Startup
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-            services.GetRequiredService<UserContext>().Database.EnsureDeleted();
+            if (app.Environment.IsDevelopment())
+            {
+                services.GetRequiredService<UserContext>().Database.EnsureDeleted();
+
+            }
             services.GetRequiredService<UserContext>().Database.EnsureCreated();
         }
 
