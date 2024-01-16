@@ -34,8 +34,9 @@ public class Startup
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooking User", Version = "v1" });
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
+        services.AddScoped<IInterCallService, InterCallService>();
         services.AddAutoMapper(typeof(DtoMappingProfile));
-        
+        services.AddSingleton(new InterCallService(Configuration));
         services.AddSingleton(new JwtUtils(Configuration));
 
         services.AddAuthentication(options =>
@@ -63,8 +64,12 @@ public class Startup
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-            await services.GetRequiredService<UserContext>().Database.EnsureDeletedAsync();
-            await services.GetRequiredService<UserContext>().Database.EnsureCreatedAsync();
+            if (app.Environment.IsDevelopment())
+            {
+                services.GetRequiredService<UserContext>().Database.EnsureDeleted();
+
+            }
+            services.GetRequiredService<UserContext>().Database.EnsureCreated();
         }
 
         if (app.Environment.IsDevelopment())

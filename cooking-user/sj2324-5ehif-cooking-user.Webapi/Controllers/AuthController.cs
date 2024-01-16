@@ -14,13 +14,15 @@ public class AuthController : ControllerBase
     private readonly JwtUtils _jwtUtils;
     private readonly ILogger<AuthController> _logger;
     private readonly IRepository<User> _repository;
+    private readonly InterCallService _interCallService;
 
     public AuthController(ILogger<AuthController> logger, JwtUtils jwtUtils,
-        IRepository<User> repository)
+        IRepository<User> repository, InterCallService interCallService)
     {
         _logger = logger;
         _jwtUtils = jwtUtils;
         _repository = repository;
+        _interCallService = interCallService;
     }
 
     [AllowAnonymous]
@@ -41,9 +43,11 @@ public class AuthController : ControllerBase
 
         var hashedPassword = new PasswordUtils().HashPassword(userDto.Password);
 
-        await _repository.InsertOneAsync(new User(userDto.Username, userDto.Lastname, userDto.Firstname, userDto.Email,
-            hashedPassword));
-
+        var user = new User(userDto.Username, userDto.Lastname, userDto.Firstname, userDto.Email,
+            hashedPassword);
+        await _repository.InsertOneAsync(user);
+        await _interCallService.createEvent(new UserServiceDto(user.Key,user.Username));
+       
         _logger.LogInformation("User registration successful for {Username}", userDto.Username);
         return Ok("Registration successful");
     }
