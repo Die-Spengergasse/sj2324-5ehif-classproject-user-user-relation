@@ -32,9 +32,9 @@ public class PreferenceController : ControllerBase
 
     // GET: api/Preference/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Preference>> GetById(string id)
+    public async Task<ActionResult<Preference>> GetById(string key)
     {
-        var result = await _preferenceRepository.GetByIdAsync(id);
+        var result = await _preferenceRepository.GetByKeyAsync(key);
         if (result.success) return Ok(result.entity);
         return NotFound(result.message);
     }
@@ -60,7 +60,7 @@ public class PreferenceController : ControllerBase
     }*/
 
     // DELETE: api/Preference/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}")]    
     public async Task<IActionResult> Delete(string id)
     {
         var result = await _preferenceRepository.DeleteOneAsync(id);

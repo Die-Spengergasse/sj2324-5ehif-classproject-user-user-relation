@@ -17,12 +17,12 @@ public class UserContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cookbook>()
-            .HasKey(r => r.Id);
+            .HasKey(r => r.Key);
         modelBuilder.Entity<Preference>()
-            .HasKey(r => r.Id);
+            .HasKey(r => r.Key);
         modelBuilder.Entity<Recipe>()
-            .HasKey(r => r.Id);
+            .HasKey(r => r.Key);
         modelBuilder.Entity<User>()
-            .HasKey(r => r.Id);
+            .HasKey(r => r.Key);
     }
 }

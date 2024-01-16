@@ -84,7 +84,7 @@ public class RepositoryTests : DatabaseTest
         var user = AddUser().Result;
 
         // Act
-        var result = await _userRepository.GetByIdAsync(user.Key);
+        var result = await _userRepository.GetByKeyAsync(user.Key);
 
         // Assert
         Assert.AreEqual(user.Key, result.entity.Key);
