@@ -23,3 +23,12 @@ In our kitchens, you're the shining star,
 With you, we'll cook, no matter how far.""
 
 -Ghandi
+
+### Deploy Container
+
+To set up the PostgreSQL container make sure to have an .env file in the docker folder with two variables and their values.
+POSTGRES_USER=exampleuser
+
+POSTGRES_PASSWORD=examplepwd
+
+To create the container run this command in the docker folder: docker-compose --env-file .env up --build postgres
