@@ -26,7 +26,7 @@ public class UserController : ControllerBase
     }
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> AddUser([FromBodx`y] UserDto userDto)
+    public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
     {
         if (!Key.CheckKey(userDto.key))
         {
