@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using sj2324_5ehif_cooking_user_relations.Application.Infrastructure;
 using sj2324_5ehif_cooking_user_relations.Application.Model;
@@ -26,6 +25,7 @@ public class Startup
 
         services.AddDbContext<UserRelationsContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));
+        
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooking User-Relations", Version = "v1" });
@@ -39,14 +39,17 @@ public class Startup
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-            services.GetRequiredService<UserRelationsContext>().Database.EnsureDeleted();
+            if (app.Environment.IsDevelopment())
+            {
+                services.GetRequiredService<UserRelationsContext>().Database.EnsureDeleted();
+            }
             services.GetRequiredService<UserRelationsContext>().Database.EnsureCreated();
         }
 
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cooking User V1"); });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cooking User-Relations V1"); });
         }
 
         app.UseAuthentication();

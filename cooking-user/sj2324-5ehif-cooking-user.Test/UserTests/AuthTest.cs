@@ -18,6 +18,7 @@ public class AuthTest
     private readonly UserContext _mockContext;
     private readonly JwtUtils _mockJwtUtils;
     private readonly ILogger<AuthController> _mockLogger;
+    private readonly InterCallService _mockinterCallService;
 
     public AuthTest()
     {
@@ -45,6 +46,7 @@ public class AuthTest
 
         _mockLogger = new Logger<AuthController>(new LoggerFactory());
         _mockJwtUtils = new JwtUtils(_mockConfiguration);
+        _mockinterCallService = new InterCallService(_mockConfiguration);
     }
 
     [Fact]
@@ -97,7 +99,7 @@ public class AuthTest
     private async Task<IActionResult> RegistrationHelper(RegisterModel registerModel)
     {
         var controller = new AuthController(_mockLogger,
-            _mockJwtUtils, new Repository<User>(_mockContext));
+            _mockJwtUtils, new Repository<User>(_mockContext), _mockinterCallService);
 
         return await controller.Register(registerModel);
     }
@@ -105,7 +107,7 @@ public class AuthTest
     private async Task<IActionResult> LoginHelper(LoginModel loginModel)
     {
         var controller = new AuthController(_mockLogger,
-            _mockJwtUtils, new Repository<User>(_mockContext));
+            _mockJwtUtils, new Repository<User>(_mockContext), _mockinterCallService);
 
         return await controller.Login(loginModel);
     }
