@@ -26,7 +26,7 @@ public class Startup
         services.AddScoped<IRepository<Preference>, Repository<Preference>>();
         services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
         services.AddScoped<IRepository<User>, Repository<User>>();
-        
+
         services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));
         services.AddSwaggerGen(c =>
@@ -80,12 +80,16 @@ public class Startup
         });
 
         services.AddControllers();
+
+
     }
 
     public async Task Configure(WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
         {
+            if (app.Environment.IsDevelopment())
+                app.UseCors();
             var services = scope.ServiceProvider;
             if (app.Environment.IsDevelopment())
             {
@@ -93,7 +97,7 @@ public class Startup
             }
             services.GetRequiredService<UserContext>().Database.EnsureCreated();
         }
-
+        app.UseDeveloperExceptionPage();
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
