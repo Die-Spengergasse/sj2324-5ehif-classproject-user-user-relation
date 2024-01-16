@@ -17,7 +17,7 @@ services:
       context: ../cooking-user/
       dockerfile: ../Docker/user.Dockerfile
     ports:
-      - "5000:5000"
+      - "5003:80"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -31,7 +31,7 @@ services:
       context: ../cooking-user-relations/
       dockerfile: ../Docker/user-relation.Dockerfile
     ports:
-      - "5100:5100"
+      - "5004:80"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

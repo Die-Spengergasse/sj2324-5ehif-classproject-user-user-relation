@@ -32,6 +32,29 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooking User", Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Scheme = "bearer",
+                Description = "Please insert JWT token into field"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            });
         });
         services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddScoped<IInterCallService, InterCallService>();
@@ -67,14 +90,12 @@ public class Startup
             if (app.Environment.IsDevelopment())
             {
                 services.GetRequiredService<UserContext>().Database.EnsureDeleted();
-
             }
             services.GetRequiredService<UserContext>().Database.EnsureCreated();
         }
 
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cooking User V1"); });
         }
