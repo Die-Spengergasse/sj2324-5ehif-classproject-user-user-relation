@@ -5,10 +5,9 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class User : IEntity
 {
-    [Key] 
-    public long Id { get; private set; }
+    [Key] public string Key { get; set; }
+    
     public List<Preference> _preferences = new();
-    public string Key { get; set; }
     
     [StringLength(50)] public string Username { get; set; }
     [StringLength(100)] public string Lastname { get; set; }

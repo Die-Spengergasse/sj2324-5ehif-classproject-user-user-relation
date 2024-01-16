@@ -5,7 +5,7 @@ namespace sj2324_5ehif_cooking_user.Application.Repository;
 
 public interface IRepository<T> where T : class
 {
-    Task<(bool success, string message, T entity)> GetByIdAsync(string key);
+    Task<(bool success, string message, T entity)> GetByKeyAsync(string key);
     Task<(bool success, string message, List<T> entity)> GetAllAsync();
     Task<(bool success, string message)> InsertOneAsync(T entity);
     Task<(bool success, string message)> UpdateOneAsync(T entity);
@@ -24,7 +24,7 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = _context.Set<T>();
     }
 
-    public async Task<(bool success, string message, T? entity)> GetByIdAsync(string key)
+    public async Task<(bool success, string message, T? entity)> GetByKeyAsync(string key)
     {
         if (key == null) throw new ArgumentNullException(nameof(key));
 
@@ -90,7 +90,7 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<(bool success, string message)> DeleteOneAsync(string key)
     {
-        var result = await GetByIdAsync(key);
+        var result = await GetByKeyAsync(key);
         if (!result.success) return (false, "Entity not found");
 
         _dbSet.Remove(result.entity);

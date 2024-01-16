@@ -5,8 +5,7 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class Cookbook : IEntity
 {
-    [Key] public long Id { get; private set; }
-    public string Key { get; set; }
+    [Key] public string Key { get; set; }
     public string OwnerKey { get; set; }
     public string Name { get; set; }
     public bool Private { get; set; }

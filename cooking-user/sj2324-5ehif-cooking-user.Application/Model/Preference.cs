@@ -5,8 +5,7 @@ namespace sj2324_5ehif_cooking_user.Application.Model;
 
 public class Preference : IEntity
 {
-    [Key] public long Id { get; private set; }
-    public string Key { get; set; }
+    [Key] public string Key { get; set; }
     [Required(AllowEmptyStrings = false)] public string Name { get; set; }
 
     public Preference(string name)
