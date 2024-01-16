@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using sj2324_5ehif_cooking_user_relations.Application.Infrastructure;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Repository;
@@ -11,6 +12,7 @@ public interface IRepository<T> where T : class
     Task<(bool success, string message)> UpdateOneAsync(T entity);
     Task<(bool success, string message)> DeleteOneAsync(string key);
     Task<(bool success, string message)> SaveChangesAsync();
+    Task<(bool success, string message, List<T>? entity)> GetAsync(Expression<Func<T, bool>> filter);
 }
 
 public class Repository<T> : IRepository<T> where T : class
@@ -115,6 +117,19 @@ public class Repository<T> : IRepository<T> where T : class
         catch (Exception e)
         {
             return (false, e.InnerException?.Message ?? e.Message);
+        }
+    }
+    
+    public async Task<(bool success, string message, List<T>? entity)> GetAsync(Expression<Func<T, bool>> filter)
+    {
+        try
+        {
+            var entity = await _dbSet.Where(filter).ToListAsync();
+            return (true, string.Empty, entity);
+        }
+        catch (DbUpdateException e)
+        {
+            return (false, e.InnerException?.Message ?? e.Message, null);
         }
     }
 }
