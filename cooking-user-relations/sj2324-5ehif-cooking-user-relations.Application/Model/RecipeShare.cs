@@ -11,9 +11,8 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
     public class RecipeShare :IEntity
     {
         private List<User> _collaborators = new();
-
-        [Key] public long Id { get; private set; }
-        [Required] public string Key { get; set; }
+        
+        [Required] [Key] public string Key { get; set; }
         
         [NotMapped]
         public RecipeShareKey ObjectKey

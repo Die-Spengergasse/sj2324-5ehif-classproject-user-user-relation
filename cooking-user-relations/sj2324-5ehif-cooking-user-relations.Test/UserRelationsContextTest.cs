@@ -51,7 +51,7 @@ public class UserRelationsContextTests
         _context.Feedbacks.Add(feedback);
         _context.SaveChanges();
 
-        var retrievedFeedback = _context.Feedbacks.FirstOrDefault(f => f.Id == feedback.Id);
+        var retrievedFeedback = _context.Feedbacks.FirstOrDefault(f => f.Key == feedback.Key);
         Assert.NotNull(retrievedFeedback);
         Assert.Equal("Great recipe!", retrievedFeedback.Text);
     }
@@ -70,7 +70,7 @@ public class UserRelationsContextTests
         var follow = new Follow(followed, follower);
         _context.Follows.Add(follow);
         _context.SaveChanges();
-        var retrievedFollow = _context.Follows.FirstOrDefault(f => f.Id == follow.Id);
+        var retrievedFollow = _context.Follows.FirstOrDefault(f => f.Key == follow.Key);
 
         Assert.NotNull(retrievedFollow);
         Assert.Equal(followed.Key, retrievedFollow.User.Key);
@@ -110,7 +110,7 @@ public class UserRelationsContextTests
         _context.RecipeShares.Remove(recipeShare);
         _context.SaveChanges();
 
-        var retrievedRecipeShare = _context.RecipeShares.FirstOrDefault(rs => rs.Id == recipeShare.Id);
+        var retrievedRecipeShare = _context.RecipeShares.FirstOrDefault(rs => rs.Key == recipeShare.Key);
         Assert.Null(retrievedRecipeShare);
     }
     [Fact]

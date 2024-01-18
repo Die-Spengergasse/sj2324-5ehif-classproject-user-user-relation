@@ -10,8 +10,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
     public class Follow : IEntity
     {
-        [Key] public long Id { get; private set; }
-        [Required] public string Key { get; set; }
+        [Required] [Key] public string Key { get; set; }
         [NotMapped]
         public FollowKey ObjectKey
         {
