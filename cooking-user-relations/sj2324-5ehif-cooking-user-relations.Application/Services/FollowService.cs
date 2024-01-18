@@ -10,6 +10,8 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Services
     {
         Task<bool> AddFollower(AddFollowDto addFollowDto);
         Task<IEnumerable<FollowDto>> GetAllFollowsAsync();
+        Task<bool> DeleteFollower(string key);
+
     }
     
     public class FollowService : IFollowService
@@ -51,6 +53,21 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Services
             await _followRepository.SaveChangesAsync();
             
             return true; 
+        }
+        
+        public async Task<bool> DeleteFollower(string key)
+        {
+            var follow = await _followRepository.GetByIdAsync(key);
+
+            if (follow.entity == null)
+            {
+                throw new InvalidOperationException("The Follower seems to not follow the user anymore.");
+            }
+
+            await _followRepository.DeleteOneAsync(follow.entity.Key);
+            await _followRepository.SaveChangesAsync();
+
+            return true;
         }
         
         public async Task<IEnumerable<FollowDto>> GetAllFollowsAsync()

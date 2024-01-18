@@ -56,18 +56,18 @@ public class FeedbackController : ControllerBase
         return BadRequest();
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetFeedbackById(string id)
+    [HttpGet("{key}")]
+    public async Task<IActionResult> GetFeedbackById(string key)
     {
-        var result = await _repository.GetByIdAsync(id);
+        var result = await _repository.GetByIdAsync(key);
         if (result.success) return Ok(result.entity);
         return BadRequest();
     }
     
-    [HttpGet("recipe/{id}")]
-    public async Task<IActionResult> GetFeedbackByRecipeId(string id)
+    [HttpGet("recipe/{key}")]
+    public async Task<IActionResult> GetFeedbackByRecipeId(string key)
     {
-        var result = await _repository.GetAsync(f => f.Recipe.Key == id);
+        var result = await _repository.GetAsync(f => f.Recipe.Key == key);
         if (result.success) return Ok(result.entity);
         return BadRequest();
     }
@@ -81,10 +81,10 @@ public class FeedbackController : ControllerBase
         return BadRequest();
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateFeedback([FromBody] UpdateFeedbackDto feedbackDto, string id)
+    [HttpPut("{key}")]
+    public async Task<IActionResult> UpdateFeedback([FromBody] UpdateFeedbackDto feedbackDto, string key)
     {
-        var feedback = await _repository.GetByIdAsync(id);
+        var feedback = await _repository.GetByIdAsync(key);
         if (!feedback.success) return BadRequest();
 
         feedback.entity.Text = feedbackDto.Text;
@@ -97,9 +97,9 @@ public class FeedbackController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteFeedback(string id)
+    public async Task<IActionResult> DeleteFeedback(string key)
     {
-        var result = await _repository.DeleteOneAsync(id);
+        var result = await _repository.DeleteOneAsync(key);
         if (result.success) return Ok();
         return BadRequest();
     }
