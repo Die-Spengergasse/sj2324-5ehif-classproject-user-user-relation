@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using sj2324_5ehif_cooking_user_relations.Application.Infrastructure;
+using sj2324_5ehif_cooking_user_relations.Application.DTO.User;
 using sj2324_5ehif_cooking_user_relations.Application.Model;
 using sj2324_5ehif_cooking_user_relations.Application.Repository;
 
 namespace sj2324_5ehif_cooking_user_relations.Webapi.Controllers;
 /// <summary>
-/// The update/deleate/create actions are only to be used by the intercommunicatio-service !!!!!!
+/// The update/deleate/create actions are only to be used by the intercommunication-service !!!!!!
 /// otherwise there will be dire consequences!
 /// </summary>
 /// <param name="key"></param>
 /// <param name="username"></param>
-public record UserDto(string key, string username);
+
 
 [ApiController]
 [Route("[controller]")]
@@ -28,18 +27,18 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
     {
-        if (!Key.CheckKey(userDto.key))
+        if (!Key.CheckKey(userDto.Key))
         {
             return Conflict("Key is in wrong format");
         }
 
         var existingUser = (await _repository.GetAllAsync()).entity.SingleOrDefault(
-            u => u.Name == userDto.username);
+            u => u.Name == userDto.Name);
         if (existingUser is not null)
         {
             return Conflict("Username exists");
         }
-        await _repository.InsertOneAsync(new User(userDto.key, userDto.username));
+        await _repository.InsertOneAsync(new User(userDto.Key, userDto.Name));
  
         return Ok(userDto);
     }

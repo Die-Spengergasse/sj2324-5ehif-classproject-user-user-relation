@@ -10,7 +10,6 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         [Key]
         public string Key { get; set; }
 
-
         [Required]
         [NotMapped]
         public UserKey ObjectKey
