@@ -11,7 +11,9 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
     public class Recipe : IEntity
     {
-         [Key] public string Key { get; set; }
+        [Key] public long Id { get; private set; }
+
+        public string Key { get; set; }
 
         public string Name { get; set; }
 
