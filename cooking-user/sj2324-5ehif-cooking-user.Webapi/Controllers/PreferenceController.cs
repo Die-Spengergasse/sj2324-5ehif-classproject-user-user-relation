@@ -31,8 +31,8 @@ public class PreferenceController : ControllerBase
     }
 
     // GET: api/Preference/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Preference>> GetById(string key)
+    [HttpGet("{key}")]
+    public async Task<ActionResult<Preference>> GetByKey(string key)
     {
         var result = await _preferenceRepository.GetByKeyAsync(key);
         if (result.success) return Ok(result.entity);
@@ -45,22 +45,12 @@ public class PreferenceController : ControllerBase
     {
         var preferenceModel = _mapper.Map<Preference>(preference);
         var result = await _preferenceRepository.InsertOneAsync(preferenceModel);
-        if (result.success) return CreatedAtAction(nameof(GetById), new { id = preferenceModel.Key }, preference);
+        if (result.success) return CreatedAtAction(nameof(GetByKey), new { key = preferenceModel.Key }, preference);
         return BadRequest(result.message);
     }
 
-    //Todo : find out how to update correctly
-    /*// PUT: api/Preference/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(string id, Preference preference)
-    {
-        var result = await _preferenceRepository.UpdateOneAsync(preference);
-        if (result.success) return NoContent();
-        return BadRequest(result.message);
-    }*/
-
     // DELETE: api/Preference/5
-    [HttpDelete("{id}")]    
+    [HttpDelete("{key}")]    
     public async Task<IActionResult> Delete(string id)
     {
         var result = await _preferenceRepository.DeleteOneAsync(id);
