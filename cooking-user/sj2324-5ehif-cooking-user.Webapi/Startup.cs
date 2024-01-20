@@ -26,7 +26,9 @@ public class Startup
         services.AddScoped<IRepository<Preference>, Repository<Preference>>();
         services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
         services.AddScoped<IRepository<User>, Repository<User>>();
-
+    
+        services.AddScoped<FillPreferenceTable>();
+        
         services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));
         services.AddSwaggerGen(c =>
@@ -96,6 +98,9 @@ public class Startup
                 services.GetRequiredService<UserContext>().Database.EnsureDeleted();
             }
             services.GetRequiredService<UserContext>().Database.EnsureCreated();
+            
+            var fillPreferenceTable = services.GetRequiredService<FillPreferenceTable>();
+            fillPreferenceTable.ReadCSV();
         }
         app.UseDeveloperExceptionPage();
         if (app.Environment.IsDevelopment())

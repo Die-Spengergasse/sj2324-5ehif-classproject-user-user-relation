@@ -11,7 +11,7 @@ public class DtoMappingProfile : Profile
         CreateMap<Cookbook, CookbookDto>();
 
         CreateMap<Preference, PreferenceDto>();
-        CreateMap<AddPreferenceDto, Preference>().
+        CreateMap<PreferenceDto, Preference>().
             ConstructUsing(dto => new Preference(dto.Name));
 
         CreateMap<Recipe, RecipeDto>();
