@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class RecipeShare
+    public class RecipeShare :IEntity
     {
         private List<User> _collaborators = new();
 
         [Key] public long Id { get; private set; }
-        [Required] public RecipeShareKey Key { get; }
+        [Required] public string Key { get; set; }
+        
+        [NotMapped]
+        public RecipeShareKey ObjectKey
+        {
+            get => new(Key);
+            set => Key = value.Value;
+        }
 
         public virtual IReadOnlyCollection<User> Collaborators => _collaborators;
         [Required] public Recipe Recipe { get; }
@@ -38,7 +46,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
                 throw new ArgumentException("Collaborators list cannot contain duplicates.", nameof(collaborators));
             }
 
-            Key = new RecipeShareKey();
+            ObjectKey = new RecipeShareKey();
             Recipe = recipe;
             _collaborators = uniqueCollaborators;
         }

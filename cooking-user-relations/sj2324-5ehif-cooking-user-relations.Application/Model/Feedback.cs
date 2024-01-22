@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class Feedback
+    public class Feedback :IEntity
     {
         private const int MinRating = 1;
         private const int MaxRating = 5;
 
         [Key] public long Id { get; private set;  }
-        [Required] public FeedbackKey Key { get;}
-
+        public string Key { get; set; }
+        [NotMapped]
+        [Required]
+        public FeedbackKey ObjectKey
+        {
+            get => new(Key);
+            set => Key = value.Value;
+        } 
         [Required] public User From { get; }
         [Required] public User To { get; }
 
@@ -36,7 +43,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             if (recipe == null) throw new ArgumentNullException(nameof(recipe));
             if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Feedback text cannot be empty or whitespace.", nameof(text));
 
-            Key = new FeedbackKey();
+            ObjectKey = new FeedbackKey();
             From = from;
             To = to;
             Rating = rating;

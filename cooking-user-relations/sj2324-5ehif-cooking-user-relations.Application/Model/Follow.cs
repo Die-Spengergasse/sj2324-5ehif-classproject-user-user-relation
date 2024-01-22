@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class Follow
+    public class Follow : IEntity
     {
         [Key] public long Id { get; private set; }
-        [Required] public FollowKey Key { get; }
+        [Required] public string Key { get; set; }
+        [NotMapped]
+        public FollowKey ObjectKey
+        {
+            get => new(Key);
+            set => Key = value.Value;
+        }
 
         [Required] public User User { get; }
         [Required] public User Follower { get; }
@@ -31,7 +38,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             {
                 throw new ArgumentException("A user cannot follow themselves.");
             }
-            Key = new FollowKey();
+            ObjectKey = new FollowKey();
             User = user;
             Follower = follower;
         }

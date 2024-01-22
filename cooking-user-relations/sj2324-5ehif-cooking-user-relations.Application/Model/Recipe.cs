@@ -1,22 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using sj2324_5ehif_cooking_user_relations.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace sj2324_5ehif_cooking_user_relations.Application.Model
 {
-    public class Recipe
+    public class Recipe : IEntity
     {
-        [Required] public RecipeKey Key { get; }
-        [Required][StringLength(50)] public string Name { get; }
 
-        public Recipe(RecipeKey key, string name)
+        [Key] public string Key { get; set; }
+
+        public string Name { get; set; }
+
+        public string AuthorKey { get; set; }
+
+        public Recipe(string name, string authorKey)
         {
-            Key = key;
+            KeyObject = new RecipeKey();
             Name = name;
+            AuthorKey = authorKey;
+        }
+
+        protected Recipe()
+        {
+        }
+
+        [NotMapped]
+        public RecipeKey KeyObject
+        {
+            get => new(Key);
+            set => Key = value.Value;
         }
     }
 }
