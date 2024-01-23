@@ -33,6 +33,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         protected Feedback()
         {
         }
+#pragma warning restore CS8618
 
         public Feedback(User from, User to, int rating, Recipe recipe, string text)
         {

@@ -26,6 +26,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         protected Follow()
         {
         }
+#pragma warning restore CS8618
 
         public Follow(User user, User follower)
         {

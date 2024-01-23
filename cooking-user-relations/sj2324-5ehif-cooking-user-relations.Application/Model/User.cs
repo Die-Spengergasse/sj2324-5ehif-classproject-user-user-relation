@@ -26,8 +26,8 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             Key = key;
             Name = name;
         }
-
+#pragma warning disable CS8618
         protected User() { }
-
+#pragma warning restore CS8618
     }
 }

@@ -24,10 +24,11 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
             Name = name;
             AuthorKey = authorKey;
         }
-
+#pragma warning disable CS8618
         protected Recipe()
         {
         }
+#pragma warning restore CS8618
 
         [NotMapped]
         public RecipeKey KeyObject

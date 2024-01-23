@@ -29,6 +29,7 @@ namespace sj2324_5ehif_cooking_user_relations.Application.Model
         protected RecipeShare()
         {
         }
+#pragma warning restore CS8618
 
         public RecipeShare(Recipe recipe, List<User> collaborators)
         {
