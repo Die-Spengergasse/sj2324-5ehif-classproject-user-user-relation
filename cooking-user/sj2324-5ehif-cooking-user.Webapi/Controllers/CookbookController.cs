@@ -4,9 +4,6 @@ using sj2324_5ehif_cooking_user.Application.DTO;
 using sj2324_5ehif_cooking_user.Application.Infrastructure;
 using sj2324_5ehif_cooking_user.Application.Model;
 using sj2324_5ehif_cooking_user.Application.Repository;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace sj2324_5ehif_cooking_user.Webapi.Controllers;
@@ -76,31 +73,31 @@ public class CookbookController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
-    //TODO: Implement in repository that AsyncGetAll returns cookbooks not users
-    //[HttpGet("user/{userKey}")]
-    //public async Task<IActionResult> GetCookbooksFromUser(string userKey)
-    //{
-    //    try
-    //    {
-    //        var (success, message, cookbooks) = await _repository.GetAllAsync();
-    //        if (!success)
-    //        {
-    //            _logger.LogError($"Error retrieving cookbooks: {message}");
-    //            return StatusCode(500, "Internal Server Error");
-    //        }
 
-    //        var userCookbooks = cookbooks.Where(c => c.OwnerKey == userKey).ToList();
+    [HttpGet("user/{userKey}")]
+    public async Task<IActionResult> GetCookbooksFromUser(string userKey)
+    {
+        try
+        {
+            var (success, message, cookbooks) = await _cookbookRepository.GetAllAsync();
+            if (!success)
+            {
+                _logger.LogError($"Error retrieving cookbooks: {message}");
+                return StatusCode(500, "Internal Server Error");
+            }
 
-    //        var cookbookDtos = userCookbooks.Select(cb => _mapper.Map<CookbookDto>(cb)).ToList();
+            var userCookbooks = cookbooks.Where(c => c.OwnerKey == userKey).ToList();
 
-    //        return Ok(cookbookDtos);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError(ex, $"Error retrieving cookbooks for user {userKey}");
-    //        return StatusCode(500, "Internal Server Error");
-    //    }
-    //}
+            var cookbookDtos = userCookbooks.Select(cb => _mapper.Map<CookbookDto>(cb)).ToList();
+
+            return Ok(cookbookDtos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error retrieving cookbooks for user {userKey}");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
 
 
     [HttpPost("{cookbookKey}/recipe")]

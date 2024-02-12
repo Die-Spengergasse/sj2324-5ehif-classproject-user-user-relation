@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>sj2324_5ehif_cooking_user.Webapi</RootNamespace>
+    <UserSecretsId>712bac78-4fb1-4c5b-9257-d268f80b603e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
